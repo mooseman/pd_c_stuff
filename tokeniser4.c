@@ -15,22 +15,58 @@
 #include <stdbool.h> 
 
 
-/* Is a character a separator or not? */ 
-/* NOTE - separators are still "valid" tokens (e.g. commas). */ 
-int issep(int ch) 
+/* See if we are moving from a "normal" character to a */ 
+/* "separator" character (or vice versa).  */  
+int issep(int ch)   
 { 
-   int ret ;    	
+   int retval ;    	
       
 /*  Space = 32,  comma = 44, newline = 10, tab = 9, 
-     semicolon = 59.   */     
+    semicolon = 59.   */     
                
    if (    ( ch == 9  )  ||  ( ch == 10 ) 
         || ( ch == 32 )  ||  ( ch == 44 ) 
-      /*  || ( ch == 59 ) */ )  ret = 1;                               
-   else ret = 0 ; 		
+        || ( ch == 59 )  )  retval = 1;                               
+   else retval = 0 ; 		
    
-   return ret; 		
+   return retval; 		
 } 	
+
+
+/* A change of chartype from sep to non-sep */ 
+/* ( or vice versa. )                       */     
+/* Ch2 should be the next char after ch1.   */                         
+int ischange(char ch1, char ch2)
+{ 
+   int retval; 	
+	
+   int a = issep(ch1); 
+   int b = issep(ch2); 
+   
+   if ( (a != b) )  retval = 1; 
+   else retval = 0; 
+   return retval;  	
+} 	
+
+
+/* Look at doing startswith(), endswith(), */ 
+/* contains(), maycontain() functions.     */  
+
+/* Special chars - Comma, semicolon, equals. */ 
+/* Could include other ops in here too. */ 
+int isspecial(int ch) 
+{ 
+   /* Comma = 44 decimal in ascii. */ 	
+   /* Semicolon = 59, equals = 61. */ 
+    
+    if ( ( ch == 44 ) || ( ch == 59 ) 
+      || ( ch == 61 ) )  return 1; 
+   else return 0;  	 
+} 	
+
+/*  IF NEXT = SPECIAL OR CURR = SPECIAL OR  */ 
+/* NEXT = WS THEN TOKENISE.  */ 
+
 
 
 
@@ -42,8 +78,9 @@ int issep(int ch)
 
 void tokenise(char *str) 
 {
-  char *ptr = NULL; 
-  ptr = str+1; 
+  char *ptr1, *ptr2 = NULL; 
+  ptr1 = str; 
+  ptr2 = str + 1;   
   	
   /* Forty tokens, max length of 79 (plus null). */   	
   char token[40][80] ; 
@@ -57,9 +94,9 @@ void tokenise(char *str)
   int ret ;  
   
   /* Move along the string. */            
-  while ( *ptr != '\0' ) 
+  while ( *ptr1 != '\0' ) 
   { 	  	
-	ret = issep(*ptr);  
+	ret = ischange(*ptr1, *ptr2);  
 	
 	if ( ret == 0 ) 
 	{ 	      		
@@ -72,19 +109,20 @@ void tokenise(char *str)
 		  /* New token */  
 		  strncpy(token[tokptr], str, numchars); 
 		  token[tokptr][numchars+1] = '\0' ;  
-          printf("Token: %s \n", token[tokptr]);  
+		  printf("Token: %s \n", token[tokptr]);  		
           /* Reset numchars. */ 		  
 		  numchars = 1; 
 		  /* Increment tokptr */ 
 		  tokptr++; 		  
-		  str = ptr; 		 
+		  str = ptr1; 		 
        }  
 	
-    ptr++ ; 			 
+    ptr1++ ; 
+    ptr2 = ptr1 + 1; 			 
   }  	
  
  /* At EOF - is ptr-1 on a token?  */  
- if ( !(isspace(*ptr-1) ) )  
+ if ( !(isspace(*ptr1) ) )  
    { 
 	 strncpy(token[tokptr], str, numchars); 
 	 token[tokptr][numchars+1] = '\0' ;  
@@ -101,7 +139,7 @@ int main()
  
 char *foo = NULL; 
 
-foo = "select _col1, col2, colC from test where city = \"Auckland\" ;" ; 
+foo = "select _col1, col2 ,colC from test where city = \"Auckland\" ;" ; 
 
 tokenise(foo);  
 
