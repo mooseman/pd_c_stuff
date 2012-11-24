@@ -39,22 +39,28 @@ Token *tokenise(char *str)
   /* Value counter. */       	   
   int j=0; 
    
-  while (*str != '\0') 
+  /* Char.  */ 
+  char c;  
+   
+  while (c != '\0') 
   { 
+	 c = str[j] ;   
+	  
 	  
 	/* Whitespace. */ 
-	if ( isspace(*str) )  
+	if ( isspace(c) )  
 	{ 
-	   str++;    	
+	   j++;    	
     } 		  
 	  	  
 	/* Keyword or colname */ 
-	else if ( (isalpha(*str) ) || ( !(strcmp( (char*)str, "_")  )  )  )  
+	else if ( (isalpha(c) ) || ( c == '_' )  )
 	{
-	   while ( isalpha(*str)  || isdigit(*str)  
-	     || !(strcmp( (char*)str, "_")  )  )
+	   while ( isalpha(c)  || isdigit(c)  
+	     || ( c == '_' )  )   
 	   { 
-		  mytok[i]->value[j] = *str; 
+		  c = str[j] ;    
+		  mytok[i]->value[j] = c; 
 		  j++; 
 	   }  
 	   
@@ -75,11 +81,12 @@ Token *tokenise(char *str)
     
     
     /* String literals. */ 
-    else if ( !(strcmp( (char*)str, "\"" ) )  )  
+    else if (  c == '"' )  
     { 
-		 while (  (strcmp( (char*)str, "\"" ) )  )     
+		 while (  ( c != '"' )  )     
 		   { 
-		     mytok[i]->value[j] = *str; 
+			 c = str[j] ;     
+		     mytok[i]->value[j] = c ; 
 		     j++; 
 	       }  
 	      mytok[i]->value[j] = '\0' ;   
@@ -93,11 +100,12 @@ Token *tokenise(char *str)
 	  
 	  
 	/* Integers */ 
-	else if ( (isdigit(*str) ) )  
+	else if ( (isdigit(c) ) )  
 	{ 
-	   while ( isdigit(*str) ) 
+	   while ( isdigit(c) ) 
 	   { 
-		 mytok[i]->value[j] = *str; 
+		 c = str[j] ;     
+		 mytok[i]->value[j] = c ; 
 		 j++; 
 	   }  
 	   mytok[i]->value[j] = '\0' ; 
@@ -110,9 +118,10 @@ Token *tokenise(char *str)
 	
 	/* Single symbols: ",", "=", ";"  */ 
 	/* Comma. */ 
-	else if ( !(strcmp( (char*)str, "," ) )  )   
+	else if ( ( c == ',' )  )   
 	  { 
-		 mytok[i]->value[j] = *str;  
+		 c = str[j] ;    
+		 mytok[i]->value[j] = c ;  
 		 j++;
 		 mytok[i]->value[j] = '\0' ; 
 		 /* Reset j. */ 
@@ -123,9 +132,10 @@ Token *tokenise(char *str)
 	  } 
 	  
 	  /* Equals sign. */ 
-	  else if ( !(strcmp( (char*)str, "=" ) )  )  
+	  else if ( ( c == '=' )  )  
 	  { 
-		 mytok[i]->value[j] = *str;  
+		 c = str[j] ;    
+		 mytok[i]->value[j] = c ;  
 		 j++; 
 		 mytok[i]->value[j] = '\0' ; 
 		 /* Reset j. */ 
@@ -136,9 +146,10 @@ Token *tokenise(char *str)
 	  } 
 	  
 	  /* Semicolon. */  
-	  else if (  !(strcmp( (char*)str, "\"" ) )  )   
+	  else if (  ( c == ';' )  )   
 	  { 
-		 mytok[i]->value[j] = *str;  
+		 c = str[j] ;    
+		 mytok[i]->value[j] = c ;  
 		 j++; 
 		 mytok[i]->value[j] = '\0' ; 
 		 /* Reset j. */ 
@@ -149,7 +160,7 @@ Token *tokenise(char *str)
 	  } 
 	 
 	/* Move the pointer. */ 
-	str++;  
+	j++;  
 	  	  	  
   }  /*  *str != '\0'   */   	     
     	    

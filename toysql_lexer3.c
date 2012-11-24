@@ -15,8 +15,6 @@
 #include <stdbool.h> 
 
 
-
-
   
 /* NOTE - need an array of tokens. */     	    
 
@@ -25,6 +23,9 @@ void tokenise(char *str)
 	
   /* An array of tokens. */ 	
   char mytok[50][80];  
+
+  /* Character. */       
+  char c;        
       
   /* Mytok array counter. */ 
   int i=0; 
@@ -32,22 +33,30 @@ void tokenise(char *str)
   /* Value counter. */       	   
   int j=0; 
    
-  while (*str != '\0') 
+  while ( c != '\0') 
   { 
+    c = str[j]; 	  
 	  
 	/* Whitespace. */ 
-	if ( isspace(*str) )  
+	if ( isspace(c) )  
 	{ 
-	   str++;    	
+	 while ( isspace(c) )  	
+	  {	
+	    j++;  
+	  } 
+	    j=0;   
     } 		  
 	  	  
 	/* Keyword or colname */ 
-	else if ( (isalpha(*str) ) || ( !(strcmp( (char*)str, "_")  )  )  )  
-	{
-	   while ( isalpha(*str)  || isdigit(*str)  
-	     || !(strcmp( (char*)str, "_")  )  )
+	/* Underscore is ascii 95. */ 
+	else if ( (isalpha(c) ) || ( c == '_' ) )  
+	{ 
+	   j=0;	
+	   while ( isalpha(c)  || isdigit(c)  
+	      || ( c == '_' )  )
 	   { 
-		  mytok[i][j] = *str; 
+		  c = str[j]; 	   
+		  mytok[i][j] = c; 
 		  j++; 
 	   }  
 	   
@@ -61,11 +70,14 @@ void tokenise(char *str)
     
     
     /* String literals. */ 
-    else if ( !(strcmp( (char*)str, "\"" ) )  )  
-    { 
-		 while (  (strcmp( (char*)str, "\"" ) )  )     
+    /* Double-quote is ascii 34. */ 
+    else if ( ( c == '"' )  )  
+    {  
+		j=0;	
+		 while (  (c != '"' )  )     
 		   { 
-		     mytok[i][j] = *str; 
+			 c = str[j]; 	    
+		     mytok[i][j] = c ; 
 		     j++; 
 	       }  
 	      mytok[i][j] = '\0' ;         	       
@@ -77,11 +89,13 @@ void tokenise(char *str)
 	  
 	  
 	/* Integers */ 
-	else if ( (isdigit(*str) ) )  
+	else if ( (isdigit(c) ) )  
 	{ 
-	   while ( isdigit(*str) ) 
+	   j=0;		
+	   while ( isdigit(c) ) 
 	   { 
-		 mytok[i][j] = *str; 
+		 c = str[j]; 	    
+		 mytok[i][j] = c; 
 		 j++; 
 	   }  
 	   mytok[i][j] = '\0' ; 
@@ -92,10 +106,11 @@ void tokenise(char *str)
 	} 
 	
 	/* Single symbols: ",", "=", ";"  */ 
-	/* Comma. */ 
-	else if ( !(strcmp( (char*)str, "," ) )  )   
+	/* Comma - ascii 44. */ 
+	else if ( ( c == ',' )  )   
 	  { 
-		 mytok[i][j] = *str;  
+		 c = str[j]; 	   
+		 mytok[i][j] = c ;  
 		 j++;
 		 mytok[i][j] = '\0' ; 
 		 /* Reset j. */ 
@@ -104,10 +119,11 @@ void tokenise(char *str)
 	     i++;		         
 	  } 
 	  
-	  /* Equals sign. */ 
-	  else if ( !(strcmp( (char*)str, "=" ) )  )  
+	  /* Equals sign - ascii 61. */ 
+	  else if ( ( c == '=' )  )  
 	  { 
-		 mytok[i][j] = *str;  
+		 c = str[j]; 	   
+		 mytok[i][j] = c ;  
 		 j++; 
 		 mytok[i][j] = '\0' ; 
 		 /* Reset j. */ 
@@ -116,10 +132,11 @@ void tokenise(char *str)
 	     i++;		 		        
 	  } 
 	  
-	  /* Semicolon. */  
-	  else if (  !(strcmp( (char*)str, "\"" ) )  )   
+	  /* Semicolon - ascii 59. */  
+	  else if (  ( c == ';' )  )   
 	  { 
-		 mytok[i][j] = *str;  
+		 c = str[j]; 	   
+		 mytok[i][j] = c ;  
 		 j++; 
 		 mytok[i][j] = '\0' ; 
 		 /* Reset j. */ 
@@ -129,13 +146,16 @@ void tokenise(char *str)
 	  } 
 	 
 	/* Move the pointer. */ 
-	str++;  
+	j++ ;  
+	
 	  	  	  
   }  /*  *str != '\0'   */   	     
     
   int k; 
+   
+   printf("Toktype: %s \n", mytok[0] );    
       
-  for(k=0; k<50; k++) 
+  for(k=0; k<5; k++) 
   { 	
      printf("Toktype: %s \n", mytok[k] );      
   }   

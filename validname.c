@@ -55,13 +55,15 @@ int main() {
 
 char *str1 = "_1test" ; 
 char *str2 = "foo_42" ; 
-char *str3 = "5bar" ; 
-char *str4 = "abf$" ; 
+char *str3 = "5bar"   ; 
+char *str4 = "*test"  ; 
+char *str5 = "abf$"   ; 
 
 validname(str1); 
 validname(str2); 
 validname(str3); 
 validname(str4); 
+validname(str5); 
        
 return 0;   
   
