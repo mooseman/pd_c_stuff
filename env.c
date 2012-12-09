@@ -36,6 +36,22 @@ typedef struct {
 } env; 
 
 
+/* To do: work on attr list, val list and */ 
+/* method list. */ 
+
+
+
+/* Objects. They have a name, type, attributes, values */ 
+/* and methods.  */  
+/* The methods can be function pointers.  */ 
+typedef struct { 
+	char *name; 
+	char *type;  /* Always "object" */ 
+	void *attr_list;
+	void *val_list; 	
+	void *method_list; 
+} obj ; 
+
 
 
 int main() 
