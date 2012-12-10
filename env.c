@@ -36,8 +36,25 @@ typedef struct {
 } env; 
 
 
-/* To do: work on attr list, val list and */ 
-/* method list. */ 
+/* To do: work on attr list and method list. */ 
+
+/* Attr list. Attribute names and their values. */ 
+typedef struct attr { 
+	char *attr_name;
+	u attr_value    
+    struct attr *next;   
+} attr_list;
+
+	 
+
+/* Method list.  */ 
+/* This will be a list of method names and their */ 
+/* function pointers (it isn't yet). */ 
+typedef struct meth { 
+	char *methodname; 
+	void *methodfuncptr;  
+	struct meth *next; 
+} method_list; 	
 
 
 
@@ -47,9 +64,8 @@ typedef struct {
 typedef struct { 
 	char *name; 
 	char *type;  /* Always "object" */ 
-	void *attr_list;
-	void *val_list; 	
-	void *method_list; 
+	attr_list a_list; 	
+	method_list m_list; 
 } obj ; 
 
 
