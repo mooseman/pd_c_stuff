@@ -18,18 +18,23 @@
 int main()
 {
 
+/* Declare a directory struct. */ 
 struct dirent *dp;
 
+/* Declare a directory stream. */ 
 DIR *dirp = NULL ;  
 
+/* Point it at the current directory. */ 
 dirp = opendir(".");
 
-
+/* While the dir struct is not NULL...  */  
 while ( (dp = readdir(dirp)) != NULL )   
 { 
+   /*  ... print the file names.  */  	
    puts(dp->d_name); 
 }  
 
+/* Close the directory. */ 
 closedir(dirp);
 
 
