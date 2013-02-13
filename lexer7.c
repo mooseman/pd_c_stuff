@@ -69,17 +69,19 @@ void tok(char *mystr)
          || testchar(b) != SPACE 
          || testchar(b) == PUNCT         
          || testchar(b) == '\0' ) ) 
-       { printf("%s \n", buf);  
-         /* memset(buf, '\0', 80);  */ 
-         /* i=0; */ 
+      {     printf("%s \n", buf);  
+         /*   memset(buf, 0, 79);    
+              i=0;                  */  
        } 
               
-        
+     
      /* printf("%d \n", type); */ 
      i++;              
-     mystr++; 
+     mystr++;  
      
-   }            
+   } 
+   
+    memset(buf, 0, 79);              
               
 }     
 
