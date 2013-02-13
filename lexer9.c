@@ -6,6 +6,24 @@
 /* This code is released to the public domain. */ 
 /* "Share and enjoy...."  ;)    */  
 
+/* TO DO:  Need to lex the table-name, column names, */ 
+/* and values (ints, strings, floats, other column names).  */  
+/* Table-name and column-name are both identifiers.  */ 
+/* The other values are datatypes.  */ 
+/* Functions to use -   */  
+/* isidentifier(buf)  */ 
+/* iskeyword(buf)  */ 
+/* If an identifier is not a keyword then it must be a */ 
+/* table-name or column-name.  */ 
+/* isop(buf) */ 
+/* isstrlit(buf)  */ 
+/* isint(buf)  */ 
+/* isfloat(buf)  */ 
+/* isEOI(buf)  */      
+
+
+
+
 
 #include <stdio.h>
 #include <stdlib.h> 
