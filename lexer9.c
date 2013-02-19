@@ -6,6 +6,13 @@
 /* This code is released to the public domain. */ 
 /* "Share and enjoy...."  ;)    */  
 
+/* End of token is when - */ 
+/* next char is space, or -  */ 
+/* next char is nul, or -  */ 
+/* next char is punct, or - */ 
+/* curr char is punct and next char is not punct. */ 
+
+
 /* TO DO:  Need to lex the table-name, column names, */ 
 /* and values (ints, strings, floats, other column names).  */  
 /* Table-name and column-name are both identifiers.  */ 
@@ -61,6 +68,19 @@ typedef struct token {
 
 
 /* Helper function for integer values. */ 
+
+
+
+/* Test two consecutive chars. If either one is a */ 
+/* comma, we have a type change. */ 
+int typechange(char ch, char next)
+{ 
+   if (  (ch == ',' && next != ',')  
+      || (ch != ',' && next == ',') )  return -1;    
+      
+   else return 0;  /* No comma */  
+} 	
+	
 
 
 /* Declare a token. */ 
@@ -153,7 +173,10 @@ int main()
  
  lexer(test) ;           
     
-                      
+ char *test2 = "select foo, bar , baz ,test from mytable ; " ; 
+ lexer(test2);     
+    
+                         
  return 0;
  
  
