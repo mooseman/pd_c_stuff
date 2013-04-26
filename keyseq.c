@@ -69,29 +69,6 @@ struct keyseq {
 /* Create a new struct and set it to NULL. */ 
 struct keyseq *k = NULL; 
 
-
-
-/* Function to add data to struct.  */ 
-struct keyseq *add_data(struct keyseq *k, int data)
-{  
-    if (data >= 65 && data <= 90)  k->shf = 1;  
-    if (data == 91) k->lbrack = 1; 
-    if (data >= 1 && data <= 26)  k->ctrl = 1; 
-      
-    switch (data) 
-    { 
-	   case 1 ... 26: k->key = data;      break; 	
-	   case 27:  k->esc = 1;                 break; 	 
-	   case 32 ... 126: k->key = data;  break;  
-	   case 127: k->del = 1;                 break;  	
-	   default:  break;
-	} 
-	
-	return k;   
-	   	
-} 		
-		
-			    
 	    
 /* Print the struct data. */ 
 void print_seq(struct keyseq *k)
@@ -107,7 +84,40 @@ void print_seq(struct keyseq *k)
 
 
 
-
+/* Function to add data to struct.  */ 
+struct keyseq *add_data(struct keyseq *k, int data)
+{  
+   /* Clear existing flags */ 
+   k->ctrl = k->del = k->esc = k->key = k->lbrack = k->shf = 0; 	
+	
+			
+	/* Set flags.  */  
+	switch (data)
+	{
+	   case  1 ... 26:  k->ctrl = 1;    break;
+	   case 27:         k->esc = 1;     break;	   
+       case 65 ... 90:  k->shf = 1;     break;
+       case 91:         k->lbrack = 1;  break;       
+       case 127:        k->del = 1;     break;
+       default:                         break; 
+    } 
+		
+	
+	switch (data)
+	{
+	   case  1 ... 27:  k->key = data;  break;	   
+	   case 32 ... 127: k->key = data;  break;       
+       default:                         break; 
+    }      
+     
+     
+    print_seq(k); 
+        	
+	return k;   
+	   	
+} 		
+		
+			    
 
 int main() 
 { 
@@ -118,24 +128,13 @@ struct keyseq *k = NULL;
 k = malloc(sizeof(struct keyseq));  
 
 
-int i; 
-
-/* TO DO : need to clear struct at some point. */ 
-
-
  while(1) 
  { 
    
-    for (i=0; i<8; i++) ; 
-       { int key = getch();           
-        /* printf("Key: %d \n", key); */
-         k = add_data(k, key);
-        /* buf[i] = key;
-         printf("Buf: %d \n", buf[i]);  
-         memset(buf, 0, 8);  */                 
-       }
-       
-   print_seq(k);      
+   int key = getch();
+   
+   k = add_data(k, key); 
+                
             
  } 
  
