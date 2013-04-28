@@ -54,6 +54,7 @@ char getche(void) {
 } 
 
 
+
 /* A struct to hold key sequence data. */ 
 struct keyseq { 
 	int ctrl;      
@@ -69,6 +70,7 @@ struct keyseq {
 /* Create a new struct and set it to NULL. */ 
 struct keyseq *k = NULL; 
 
+	    
 	    
 /* Print the struct data. */ 
 void print_seq(struct keyseq *k)
@@ -90,7 +92,7 @@ struct keyseq *add_data(struct keyseq *k, int data)
    /* Clear existing flags */ 
    k->ctrl = k->del = k->esc = k->key = k->lbrack = k->shf = 0; 	
 	  	
-			
+	  	
 	/* Set flags.  */  
 	switch (data)
 	{
@@ -112,13 +114,40 @@ struct keyseq *add_data(struct keyseq *k, int data)
        default:                         break; 
     }          
      
-    print_seq(k); 
                    	        	
 	return k;   
 	   	
 } 		
-		
-			    
+
+
+
+
+/* Function to add data to struct.  */ 
+void test(struct keyseq *k) 
+{  
+	
+  int c = getch();  	
+	
+  while( (c > 0 && c < 127 )  )	
+  {
+ 	
+  c = getch(); 	 
+	  
+	switch (c)
+	{
+	   case  4:  break; 	   
+       /* default:  add_data(k, c);  break; */ 
+       default:  printf("%d \n", c);  break;   
+    }  
+	
+  } /* while */ 	
+	      
+  print_seq(k);  
+  
+}   	    
+	   
+	
+				    
 
 int main() 
 { 
@@ -131,15 +160,13 @@ k = malloc(sizeof(struct keyseq));
 
  while(1) 
  { 
-   
-   int key = getch();
-   
-   k = add_data(k, key); 
+                
+   test(k) ; 
                 
             
  } 
  
-free(k);  
+
   
 return 0; 
 

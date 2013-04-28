@@ -78,21 +78,31 @@ void print_seq(struct keyseq *k)
 	printf( "k->esc = %d\n",    (k->esc) );   		 		
 	printf( "k->lbrack = %d\n", (k->lbrack) );   		 		
 	printf( "k->del = %d\n",    (k->del) );   		 		
-	printf( "k->key = %d\n",    (k->key) );   
-	puts("--------------------\n"); 		 			    
+	printf( "k->key = %d\n",    (k->key) );   		 		
+	    
 }
 
 
 
+
 /* Function to add data to struct.  */ 
-struct keyseq *add_data(struct keyseq *k, int data)
+void add_data(struct keyseq *k, int i) 
 {  
-   /* Clear existing flags */ 
-   k->ctrl = k->del = k->esc = k->key = k->lbrack = k->shf = 0; 	
-	  	
+	
+  /* Clear existing flags */ 
+  k->ctrl = k->del = k->esc = k->key = k->lbrack = k->shf = 0; 		
 			
-	/* Set flags.  */  
-	switch (data)
+            
+  switch (i)
+	{
+	   case  1 ... 27:  k->key = i;  break;	   
+	   case 32 ... 127: k->key = i;  break;       
+       default:                      break; 
+    }           
+                        
+            					
+  /* Set flags.  */  
+  switch (i)
 	{
 	   case  1 ... 26:  k->ctrl = 1;    break;
 	   case 27:         k->esc = 1;     break;	   
@@ -101,45 +111,49 @@ struct keyseq *add_data(struct keyseq *k, int data)
        case 127:        k->del = 1;     break;
        default:                         break; 
     } 
-		
-		
-	/* We do not include esc and lbrack keys here. */ 
-	switch (data)
-	{
-	   case  1 ... 26:  k->key = data;  break;	   
-	   case 32 ... 90:  k->key = data;  break;	   
-	   case 92 ... 127: k->key = data;  break;       
-       default:                         break; 
-    }          
-     
-    print_seq(k); 
-                   	        	
-	return k;   
-	   	
+				     
+     print_seq(k); 	
+       	   	
 } 		
 		
+	
+
+/*  Call the add_data function while we have data to add. */ 
+void run( char (*func)(void) )     
+{ 
+   
+   char c = func() ; 	   	
+	
+   while(c != '\0') 
+   {    	
+	  add_data(k, c) ; 	
+   }
+	
+   print_seq(k); 	
+	
+} 	
+	
+	
+	
+	
 			    
 
 int main() 
 { 
 
 
-/* Create a new list and set it to NULL. */ 
-struct keyseq *k = NULL; 
-k = malloc(sizeof(struct keyseq));  
-
 
  while(1) 
  { 
-   
-   int key = getch();
-   
-   k = add_data(k, key); 
+         
+   int c = getch() ;  
+    
+   add_data(k, c); 
                 
             
  } 
  
-free(k);  
+
   
 return 0; 
 

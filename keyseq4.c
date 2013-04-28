@@ -1,12 +1,12 @@
 
 
 
-/*  keyseq.c                                              */  
-/*  Code to get the sequence of codes for keys.           */ 
-/*  Very useful for getting codes for keys with           */ 
-/*  more than one character (e.g. arrow keys)             */ 
-/*  This code is released to the public domain.           */  
-/*  "Share and enjoy....... "  ;)                         */   
+/*  keyseq.c                                      */  
+/*  Code to get the sequence of codes for keys.   */ 
+/*  Useful for getting codes for keys with        */ 
+/*  more than one character (e.g. arrow keys)     */ 
+/*  This code is released to the public domain.   */  
+/*  "Share and enjoy....... "  ;)                 */   
   
 
 #include <string.h>  
@@ -54,6 +54,7 @@ char getche(void) {
 } 
 
 
+
 /* A struct to hold key sequence data. */ 
 struct keyseq { 
 	int ctrl;      
@@ -69,6 +70,7 @@ struct keyseq {
 /* Create a new struct and set it to NULL. */ 
 struct keyseq *k = NULL; 
 
+	    
 	    
 /* Print the struct data. */ 
 void print_seq(struct keyseq *k)
@@ -87,10 +89,7 @@ void print_seq(struct keyseq *k)
 /* Function to add data to struct.  */ 
 struct keyseq *add_data(struct keyseq *k, int data)
 {  
-   /* Clear existing flags */ 
-   k->ctrl = k->del = k->esc = k->key = k->lbrack = k->shf = 0; 	
-	  	
-			
+    		  	
 	/* Set flags.  */  
 	switch (data)
 	{
@@ -112,13 +111,38 @@ struct keyseq *add_data(struct keyseq *k, int data)
        default:                         break; 
     }          
      
-    print_seq(k); 
                    	        	
 	return k;   
 	   	
 } 		
-		
-			    
+
+
+
+
+/* Function to add data to struct.  */ 
+void test(struct keyseq *k) 
+{  
+  puts("Press Ctrl-C to quit...."); 	
+  puts("Press Ctrl-D to show struct...."); 	 	
+	
+  /* Clear existing flags */ 
+  k->ctrl = k->del = k->esc = k->key = k->lbrack = k->shf = 0; 	
+			
+  int c = getch();  	
+	
+  while( (c != 4 )  )	/* Ctrl-D */ 
+  { 
+	 add_data(k, c);  	
+	 printf("Added %d \n", c);  
+     c = getch(); 	     
+  }	
+  	        
+  print_seq(k);  
+  
+}   	    
+	   
+	
+				    
 
 int main() 
 { 
@@ -130,16 +154,12 @@ k = malloc(sizeof(struct keyseq));
 
 
  while(1) 
- { 
-   
-   int key = getch();
-   
-   k = add_data(k, key); 
-                
-            
+ {                 
+   test(k) ;                             
  } 
  
-free(k);  
+  
+free(k);   
   
 return 0; 
 
