@@ -56,22 +56,22 @@ char getche(void) {
 
 
 /* An array to hold key sequence data. */ 
-char keys[20] ;  
+char keys[8][3];  
 
 	
-void clear_keys(char keys[20]) 
+void clear_keys(char keys[8][3]) 
 {  
    int i; 
    
-   for (i=0; i<20; i++)
-   {
-	  keys[i] = " " ; 
+   for (i=0; i<7; i++)
+   { 
+	  snprintf(keys[i], 3, "%c", 0);    	  
    } 	
 		
 } 		
 	 
 	    
-void add_data(char keys[20], int i, int a)
+void add_data(char keys[8][3], int i, int a)
 {       	   
    /* keys[i] = str; */ 
    snprintf(keys[i], 3, "%c", a); 	
@@ -81,13 +81,13 @@ void add_data(char keys[20], int i, int a)
 	    
 	    
 /* Print the keys data. */ 
-void print_keys(char keys[20])
+void print_keys(char keys[8][3])
 {  
    int i; 
    
-   for (i=0; i<20; i++)
+   for (i=0; i<7; i++)
    {
-	  printf("Key %d is %c \n", i, keys[i]) ;   
+	  printf("Key %d is %s \n", i, keys[i]) ;   
    }  	   	
 
 }
@@ -96,7 +96,7 @@ void print_keys(char keys[20])
 
 
 /* Function to add data to keys array.  */ 
-void test(char keys[20]) 
+void test(char keys[8][3]) 
 {  
   puts("Press Ctrl-C to quit...."); 	
   puts("Press Ctrl-D to show keys...."); 	 	
@@ -112,7 +112,7 @@ void test(char keys[20])
   while( (c != 4 )  )	/* Ctrl-D */ 
   {        	  	  
 	 add_data(keys, i, c);  	
-	 printf("Added %c \n", keys[i]);  
+	 printf("Added %s \n", keys[i]);  
 	 i++;
      c = getch(); 	     
   }	
@@ -129,7 +129,7 @@ int main()
 
 
 /* Create a new array. */ 
-char mykeys[20] ; 
+char mykeys[8][3] ; 
 
 
  while(1) 
