@@ -109,7 +109,7 @@ void test(int keys[8])
   int i=0;	
 	
   while( (c != 4 )  )	/* Ctrl-D */ 
-  { 	  	  
+  { 	  
 	 add_data(keys, i, c);  	
 	 printf("Added %d \n", c);  
 	 i++;

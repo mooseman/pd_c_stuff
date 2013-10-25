@@ -1,0 +1,34 @@
+
+   *** README -  pd_dir_code *** 
+
+Acknowledgement - The HTML documentation and the source code in this repo is all 
+done by David R. Tribble <david@tribble.com>. 
+
+This material comes from David's site here - 
+http://david.tribble.com/text/c0xdir.html
+
+From the introduction of the above document -
+  
+****************************************************************
+ 1. Introduction 
+****************************************************************
+
+" All hosted ISO C (ISO 9899:1999) implementations support the concept of an I/O stream, also known as a file, i.e., a named collection of characters (bytes) that is accessible via the standard library functions declared in the <stdio.h> header, such as fopen().
+
+The majority of hosted C implementations support the concept of a file system, also known as a structured storage device, containing external files. The majority of hosted C implementations also support the notion of directories containing files and possibly nested subdirectories.
+
+A file system typically represents a set of one or more files, usually arranged in a tree-like hierarchy of directories, subdirectories, and files. Each file corresponds to the ISO C notion of a binary or text I/O stream.
+
+This proposal describes a set of types and functions to be added to the standard C library to provide the means to manipulate directories. These new capabilities are intended to be provided by hosted implementations, and should not be required of free-standing implementations." 
+
+**************************************************************** 
+
+
+David has released both the documentation and the source code to the public domain. 
+Very many thanks, David, for doing that and for your excellent work in this area.     
+
+So - "share and enjoy", everyone.......  :)  
+
+- mooseman 
+
+  

@@ -1,7 +1,7 @@
 
 
 
-/*  keyseq6.c                                      */  
+/*  keyseq.c                                      */  
 /*  Code to get the sequence of codes for keys.   */ 
 /*  Useful for getting codes for keys with        */ 
 /*  more than one character (e.g. arrow keys)     */ 
@@ -56,38 +56,45 @@ char getche(void) {
 
 
 /* An array to hold key sequence data. */ 
-char keys[8][3];  
+int keys[8] ;  
 
-	
-void clear_keys(char keys[8][3]) 
+
+/* Clear one element.  */   	
+void clear_one(int keys[8], int i) 
 {  
+   keys[i] = 0;     			
+} 		
+	
+	
+/* Clear all keys. */ 	    
+void clear_all(int keys[8])
+{ 
    int i; 
    
-   for (i=0; i<7; i++)
-   { 
-	  snprintf(keys[i], 3, "%c", 0);    	  
-   } 	
-		
-} 		
-	 
+   for(i=0; i<8; i++) 
+   {  	
+	  keys[i] = 0;
+   }
+   
+}	    
 	    
-void add_data(char keys[8][3], int i, int a)
+	    
+void add_data(int keys[8], int i, int data)
 {       	   
-   /* keys[i] = str; */ 
-   snprintf(keys[i], 3, "%c", a); 	
+   keys[i] = data; 
 } 	
 
 	    
 	    
 	    
 /* Print the keys data. */ 
-void print_keys(char keys[8][3])
+void print_keys(int keys[8])
 {  
    int i; 
    
-   for (i=0; i<7; i++)
+   for (i=0; i<8; i++)
    {
-	  printf("Key %d is %s \n", i, keys[i]) ;   
+	  printf("Key %d is %d \n", i, keys[i]) ;   
    }  	   	
 
 }
@@ -96,23 +103,24 @@ void print_keys(char keys[8][3])
 
 
 /* Function to add data to keys array.  */ 
-void test(char keys[8][3]) 
+void test(int keys[8]) 
 {  
   puts("Press Ctrl-C to quit...."); 	
   puts("Press Ctrl-D to show keys...."); 	 	
 	
   /* Clear existing flags */ 
-  clear_keys(keys) ; 
-     			
-  int c = getch();  
-	  
+  clear_all(keys) ; 
+    
+			
+  int c = getch();  	
 	
   int i=0;	
 	
-  while( (c != 4 )  )	/* Ctrl-D */         
-  {        	  	  
+  /* while( (c != 4 )  ) */ 	/* Ctrl-D */     
+  while(1) 
+  { 	  
 	 add_data(keys, i, c);  	
-	 printf("Added %s \n", keys[i]);  
+	 printf("Added %d \n", c);  
 	 i++;
      c = getch(); 	     
   }	
@@ -128,9 +136,8 @@ int main()
 { 
 
 
-/* Create a new array. */ 
-char mykeys[8][3] ; 
-
+/* Create a new list and set it to NULL. */ 
+int mykeys[8] ; 
 
  while(1) 
  {                 
