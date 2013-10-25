@@ -1,0 +1,3582 @@
+<!--
+! @(#)drt/text/std/c0xdir.html $Revision: 1.8 $ $Date: 2006/03/11 04:21:07 $
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+! Signed by <david@tribble.com> 0x8ACE3E79, with CR/LF newlines
+! Created: Sun Oct 12 21:01:00 CDT 2003
+!-->
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+
+<meta name="revision" content="1.7 2006-03-10&gt;
+&lt;meta name=" supersedes"="" 1.5="" 2004-07-14"="" !--="">
+<meta name="rights" content="This document is in the public domain.">
+<meta name="title" content="ISO C 200X Proposal: Directory Handling Functions">
+<meta name="author" content="David R. Tribble">
+<meta name="description" content="ISO C 200X Proposal: Directory Handling Functions">
+<meta name="subject" content="ISO C 200X Proposal: Directory Handling Functions">
+<meta name="language" content="en.usa.iso-8859-1">
+<meta name="keywords" content="programming, language, standard, ANSI, ISO, C, directory">
+<meta name="source" content="http://david.tribble.com/text/c0xdir.html">
+<meta name="voluntary content rating" content="general">
+<meta name="author-email" content="mailto:david@tribble.com">
+<meta name="author-home-page-url" content="http://david.tribble.com/">
+<meta name="author-pgp-key-url" content="http://david.tribble.com/pgpkey.htm">
+<meta name="robots" content="index,follow">
+
+<title>
+ ISO C 200X Directory Handling Functions
+</title>
+
+</head>
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- ----------------------------------------------------------------------- -->
+<body vlink="#660000" alink="#FF0000" bgcolor="#F0E8D0" link="#660000">
+
+<a name="top">
+</a><p align="center"><a name="top"> </a>
+
+<table width="100%" cols="1" border="1">
+ <tbody><tr>
+  <td align="center" bgcolor="#E8E0C8">
+   <br>
+
+   <font size="+3">
+   <b> ISO C 200X Proposal: </b> <br>
+   <b> Directory Handling Functions </b>
+   </font>
+
+   <p>
+   </p><hr width="50%">
+
+   <p>
+   <font size="+2">
+   <b> By David R. Tribble </b> <br>
+   <a href="mailto:david@tribble.com">
+    <b>david@tribble.com</b></a> <br>
+   </font>
+   <br>
+
+   <font size="+2">
+   <b> Revision 1.7, 2006-03-10</b>
+   </font>
+   <br> <br>
+
+  </p></td>
+ </tr>
+</tbody></table>
+
+<!-- ----------------------------------------------------------------------- -->
+</p><p>
+&nbsp;
+<a name="TOC"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;Contents </b> </font> </td> </tr>
+</tbody></table>
+
+</p><p>
+</p><ul>
+ <li> <a href="#Cover">             Cover Sheet </a>
+ </li><li> 1. <a href="#Intro">          Introduction </a>
+  <ul>
+   <li> 1.1 <a href="#Problems">      Problems Addressed </a>
+   </li><li> 1.2 <a href="#Goals">         Design Goals </a>
+  </li></ul>
+ </li><li> 2. <a href="#Definitions">    Definitions </a>
+ </li><li> 3. <a href="#Constants">      Constants </a>
+  <ul>
+   <li> 3.1 <a href="#const-__STDC_DIR__">Constant</a>
+              <tt>__STDC_DIR__</tt>
+   </li><li> 3.2 <a href="#const-__STDC_SETCURRDIR__">Constant</a>
+              <tt>__STDC_SETCURRDIR__</tt>
+  </li></ul>
+ </li><li> 4. <a href="#Types">          Types </a>
+  <ul>
+   <li> 4.1 <a href="#type-DIR">Typedef</a>
+              <tt>DIR</tt>
+   </li><li> 4.2 <a href="#struct-dirent">Structure</a>
+              <tt>dirent</tt>
+  </li></ul>
+ </li><li> 5. <a href="#Functions">      Functions </a>
+  <ul>
+   <li> 5.1 <a href="#Functions-Dir">   Directory Management Functions </a>
+    <ul>
+     <li> 5.1.1 <a href="#func-getcurrdir">Function</a>
+                  <tt>getcurrdir()</tt>
+     </li><li> 5.1.2 <a href="#func-setcurrdir">Function</a>
+                  <tt>setcurrdir()</tt>
+     </li><li> 5.1.3 <a href="#func-createdir">Function</a>
+                  <tt>createdir()</tt>
+    </li></ul>
+   </li><li> 5.2 <a href="#Functions-Names"> Directory and File Name Functions </a>
+    <ul>
+     <li> 5.2.1 <a href="#func-getdirname">Function</a>
+                  <tt>getdirname()</tt>
+     </li><li> 5.2.2 <a href="#func-getfilename">Function</a>
+                  <tt>getfilename()</tt>
+<!-- REMOVED (1.6, 2006-03-07)
+     <li> 5.2.3 <a href="#func-getfiletype">Function</a>
+                  <tt>getfiletype()</tt>
+!-->
+     </li><li> 5.2.3 <a href="#func-mkdirname">Function</a>
+                  <tt>mkdirname()</tt>
+     </li><li> 5.2.4 <a href="#func-mkfilename">Function</a>
+                  <tt>mkfilename()</tt>
+     </li><li> 5.2.5 <a href="#func-matchfilename">Function</a>
+                  <tt>matchfilename()</tt>
+    </li></ul>
+   </li><li> 5.3 <a href="#Functions-Search">Directory Searching Functions </a>
+    <ul>
+     <li> 5.3.1 <a href="#func-opendir">Function</a>
+                  <tt>opendir()</tt>
+     </li><li> 5.3.2 <a href="#func-closedir">Function</a>
+                  <tt>closedir()</tt>
+     </li><li> 5.3.3 <a href="#func-readdir">Function</a>
+                  <tt>readdir()</tt>
+     </li><li> 5.3.4 <a href="#func-rewinddir">Function</a>
+                  <tt>rewinddir()</tt>
+<!-- REMOVED (1.3, 2003-12-29)
+     <li> 5.3.4 <a href="#func-seekdir">Function</a>
+                  <tt>seekdir()</tt>
+!-->
+<!-- REMOVED (1.3, 2003-12-29)
+     <li> 5.3.5 <a href="#func-telldir">Function</a>
+                  <tt>telldir()</tt>
+!-->
+    </li></ul>
+  </li></ul>
+ </li><li> 6. <a href="#Examples">   Examples </a>
+  <ul>
+   <li> <a href="#Example-1">       Example 1 </a>
+   </li><li> <a href="#Example-2">       Example 2 </a>
+   </li><li> <a href="#Example-3">       Example 3 </a>
+   </li><li> <a href="#Example-4">       Example 4 </a>
+   </li><li> <a href="#Example-5">       Example 5 </a>
+   </li><li> <a href="#Example-6">       Example 6 </a>
+  </li></ul>
+ </li><li> 7. <a href="#Prior-Art">      Prior Art </a>
+ </li><li> <a href="#Source">            Source Code </a>
+ </li><li> <a href="#Acknowledgements">  Acknowledgements </a>
+ </li><li> <a href="#References">        References </a>
+ </li><li> <a href="#History">           Revision History </a>
+</li></ul>
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- STANDARD BOILER-PLATE C0X SUBMISSION FORM -->
+
+<p>
+&nbsp;
+<a name="Cover"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;Cover Sheet </b> </font> </td> </tr>
+</tbody></table>
+
+</p><p align="center">
+<table width="80%" cols="1" border="1">
+ <tbody><tr>
+  <td bgcolor="#E8E0C8">
+<pre>&nbsp;
+                           <b>C200X Revision Proposal</b>
+                           =======================
+
+   Title:              <b>Directory Handling Functions</b>
+   Author:             David R. Tribble
+   Author Affiliation: Self
+   Postal Address:     ***************
+                       USA
+   Telephone Number:   ***************
+   E-mail Address:     <a href="mailto:david@tribble.com">david@tribble.com</a>
+   Sponsor:            _____________
+   Revision:           <a href="#History">1.7</a>, 2006-03-10
+   Supersedes:         1.6, 2006-03-07
+   Proposal Category:
+      __ Editorial change/non-normative contribution
+      __ Correction
+      X_ New feature
+      __ Addition to obsolescent feature list
+      __ Addition to Future Directions
+      __ Other (please specify)  ______________________________
+   Area of Standard Affected:
+      __ Environment
+      __ Language
+      __ Preprocessor
+      X_ Library
+         X_ Macro/typedef/tag name
+         X_ Function
+         X_ Header
+         __ Other (please specify)  ______________________________&nbsp;&nbsp;
+   Prior Art:
+        The POSIX functions opendir(), readdir(), et al.
+        The Microsoft Win32 functions FindFirstFile() and
+        FindNextFile().  Various other operating systems provide
+        similar functionality (VMS, MS-DOS, MacOS, etc.).
+   Target Audience:  _____________________________________________
+   Related Documents (if any): None.
+   Proposal Attached: X_ Yes __ No, but what's your interest?
+   Abstract:
+        The addition of the concept of "directory" to complement the
+        existing concept of "file" (I/O stream).  The addition of
+        standard functions providing the capability to create and
+        search directories, and functions for manipulating file and
+        directory names.  These functions and types are defined in a
+        new header file, &lt;stddir.h&gt;.
+&nbsp;
+</pre>
+  </td>
+ </tr>
+</tbody></table>
+
+<!-- ----------------------------------------------------------------------- -->
+</p><p>
+&nbsp;
+<a name="Intro"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;1. Introduction </b> </font> </td> </tr>
+</tbody></table>
+
+</p><p>
+All hosted ISO&nbsp;C (ISO&nbsp;9899:1999) implementations support the concept
+of an I/O <i>stream</i>, also known as a <i>file</i>,
+i.e., a named collection of characters (bytes) that is accessible via the
+standard library functions declared in the <tt>&lt;stdio.h&gt;</tt> header,
+such as <tt>fopen()</tt>.
+
+</p><p>
+The majority of hosted C implementations support the concept of a
+<i>file system</i>, also known as a <i>structured storage device</i>,
+containing external files.
+The majority of hosted C implementations also support the notion of
+<i>directories</i> containing files and possibly nested subdirectories.
+
+</p><p>
+A file system typically represents a set of one or more files, usually arranged
+in a tree-like hierarchy of directories, subdirectories, and files.
+Each file corresponds to the ISO&nbsp;C notion of a binary or text
+I/O <i>stream</i>.
+
+<!-- OMITTED
+<p>
+Implementations also typically provide a set of non-standard library functions
+for traversing directories, and examining the attributes of
+directories and files.
+!-->
+
+</p><p>
+This proposal describes a set of types and functions to be added to the
+standard C library to provide the means to manipulate directories.
+These new capabilities are intended to be provided by hosted implementations,
+and should not be required of free-standing implementations.
+
+<!-- ------------------------------- -->
+</p><hr>
+
+<a name="Problems"></a>
+<h3> 1.1 Problems Addressed </h3>
+
+<p>
+The following is a list of common programming operations that are not
+currently supported by ISO&nbsp;C.
+
+</p><p>
+</p><ol>
+ <!-- ------------------------------ -->
+ <li>
+  Create a new directory.
+
+ <!-- ------------------------------ -->
+ </li><li>
+  <p>
+  Create a file name for a file within a particular directory.
+
+ <!-- ------------------------------ -->
+ </p></li><li>
+  <p>
+  Decompose a file name into its component directory and file name parts.
+
+ <!-- ------------------------------ -->
+ </p></li><li>
+  <p>
+  Determine the current directory associated with the executing program.
+
+ <!-- ------------------------------ -->
+ </p></li><li>
+  <p>
+  Set the current directory of the executing program.
+
+ <!-- ------------------------------ -->
+ </p></li><li>
+  <p>
+  Search for entries within a particular directory.
+
+</p></li></ol>
+
+<p>
+This proposal describes a set of types and functions to be added to the
+standard C library to provide these capabilities.
+
+<!-- ------------------------------- -->
+</p><hr>
+
+<a name="Goals"></a>
+<h3> 1.2 Design Goals </h3>
+
+<p>
+For creating a set of types and functions to provide directory and file
+operations, it is useful to adhere to the following list of design goals
+and guidelines.
+
+</p><p>
+</p><ol>
+ <!-- ------------------------------ -->
+ <li>
+  Prior art. <br>
+  Use existing practice as much as is reasonably possible.
+  At&nbsp;the very least, do not propose types or functions that would break
+  large amounts of existing (but non-standard) code.
+
+ </li><li>
+  <p>
+  Efficiency. <br>
+  Structure objects should not occupy excessive amounts of memory space,
+  nor should they require excessive amounts of CPU time to create and destroy.
+
+ </p></li><li>
+  <p>
+  Safety. <br>
+  All functions should be thread-safe, and the use of modifiable global data
+  should be avoided.
+  Maximum lengths of variable-sized data (such as strings) should be passed as
+  extra arguments to functions to avoid data overruns.
+
+ </p></li><li>
+  <p>
+  Wide target universe. <br>
+  The widest possible variety of existing implementations should be addressed.
+  Functions that will work on only 95% of existing systems are not a
+  sufficiently complete solution.
+  As&nbsp;widespread as they are, Win32 and POSIX systems are not the only
+  operating systems to be addressed.
+
+ </p></li><li>
+  <p>
+  Sufficiently general. <br>
+  Proposed types and functions should be sufficiently general and give
+  implementers reasonably wide latitude in the way they may choose to
+  implement the functions.
+  This implies that certain details should be vague enough to allow for
+  many disparate operating systems, but well defined enough to allow for
+  portable coding with predictable behavior.
+
+</p></li></ol>
+
+<!-- ----------------------------------------------------------------------- -->
+<p>
+&nbsp;
+<a name="Definitions"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;2. Definitions </b> </font> </td> </tr>
+</tbody></table>
+
+</p><p>
+</p><dl>
+  <!-- ----------------------------- -->
+  <a name="term-current-directory"></a>
+  <dt> <b>current directory</b>
+  </dt><dd>
+   The directory associated with the current state of execution of
+   the execution unit.
+   Not all implementations support this concept.
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="term-directory"></a>
+  </p></dd><dt> <b>directory</b>
+  </dt><dd>
+    A collection of <i>files</i> and possibly other <i>directories</i>
+    residing on an external <i>storage device</i>.
+    Most implementations support a hierarchical arrangement of directories
+    and files.
+    Most implementations also associate the execution of a given execution unit
+    (i.e., program) with a <i>current directory</i>.
+
+    <p>
+    The current ISO&nbsp;C standard (1999) does not define the concept of
+    <i>directory</i>.
+
+  <!-- ----------------------------- -->
+  </p><p>
+  <a name="term-directory-entry"></a>
+  </p></dd><dt> <b>directory entry</b>
+  </dt><dd>
+    A <i>file</i>, <i>directory</i>, or some other type of data storage entity
+    enumerated within a <i>directory</i>.
+    Such an entry contains the name of the entity,
+    and possibly other information about it.
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="term-directory-search"></a>
+  </p></dd><dt> <b>directory search</b>
+  </dt><dd>
+    The process of sequentially visiting the <i>entries</i> within a
+    given <i>directory</i>.
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="term-directory-search-context"></a>
+  </p></dd><dt> <b>directory search context</b>
+  </dt><dd>
+    Information about the state of a given <i>directory search</i> that is
+    still in progress.
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="term-file"></a>
+  </p></dd><dt> <b>file</b>
+  </dt><dd>
+    A sequence of bytes (or characters) residing on an external
+    <i>file system</i> or <i>structured storage device</i>.
+    Programs can open files by name (using the <tt>fopen()</tt> library
+    function) and read and/or write their contents.
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="term-file-system"></a>
+  </p></dd><dt> <b>file system</b>
+  </dt><dd>
+    A collection of external <i>files</i> and possibly <i>directories</i>.
+    Typically, such a system is a <i>structured storage device</i> composed of
+    a limited number of <i>allocation units</i> or <i>blocks</i>.
+    A&nbsp;file system typically resides on a particular <i>storage device</i>,
+    such as a hard disk, but may also be represented on other forms of
+    hardware storage systems.
+
+<!-- REMOVED (1.6, 2006-03-07)
+  <!-- ----------------------------- --/>
+  <p>
+  <a name="term-file-type"></a>
+  <dt> <b>file type</b>
+  <dd>
+    A component of a path name that specifies or suggests what kind of file
+    or directory it is.
+    Some implementations provide this as a <i>suffix</i> of the file name,
+    while others segregate files of like type into different areas of the
+    structured storage device on which the file or directory resides.
+!-->
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="term-path-name"></a>
+  </p></dd><dt> <b>path name</b>
+  </dt><dd>
+    The name of a file or directory (or possibly some other kind of I/O device).
+    A&nbsp;path name is generally the same thing as a file name, although some
+    implementations may classify <i>file</i> and <i>directory</i> names as
+    different entities; for such implementations, a <i>path</i> name encompasses
+    both kinds of names.
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="term-pattern"></a>
+  <a name="term-filename-pattern"></a>
+  </p></dd><dt> <b>pattern</b>
+  </dt><dd>
+    A kind of regular expression for matching file or directory (path) names.
+    Such patterns contain special pattern-matching characters, or wildcard
+    characters, that allow a pattern to match more than one filename.
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="term-regular-file"></a>
+  </p></dd><dt> <b>regular file</b>
+  </dt><dd>
+    A file that is not a directory (or some other kind of I/O device),
+    i.e., a normal file containing character or binary data.
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="term-structured-storage-device"></a>
+  </p></dd><dt> <b>structured storage device</b>
+  </dt><dd>
+    A hardware device, such as a disk drive, used for storing data, usually
+    arranged as a collection of <i>files</i> and possibly <i>directories</i>.
+    See <i>file system</i>.
+
+</dd></dl>
+
+<!-- ----------------------------------------------------------------------- -->
+<p>
+&nbsp;
+<a name="Constants"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;3. Constants </b> </font> </td> </tr>
+</tbody></table>
+
+</p><p>
+The following constants are defined in the
+<tt><b>&lt;stddir.h&gt;</b></tt> standard header.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    The constants, functions, and types in this proposal are to be defined in a
+    new standard library header file.
+    This isolates the new names in a new header file, thus preventing existing
+    code from breaking.
+    </i>
+  </font>
+</p></blockquote>
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="const-__STDC_DIR__"></a>
+<h3> 3.1 Constant <tt>__STDC_DIR__</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    #define <b>__STDC_DIR__</b>  <i>integer-expression</i>
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This is a preprocessor macro defined as a constant integer expression.
+The expression evaluates to a non-zero (true) value if the implementation
+supports the notion of directories (specifically, if the implementation supports
+all of the types and functions declared in the <tt><b>&lt;stddir.h&gt;</b></tt>
+header), otherwise it evaluates to zero (false).
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This macro can be used to test at compile time whether or not an
+    implementation supports the functions specified in this proposal.
+
+    </p><p>
+    This implies that a conforming hosted implementation will be expected to
+    provide the <tt><b>&lt;stddir.h&gt;</b></tt> standard header file, but will
+    not be expected to support the types and functions defined within it.
+
+    </p><p>
+    Presumably, systems that do in fact support the notion of directories will
+    provide an operating set of directory functions and thus define the
+    <tt>__STDC_DIR__</tt> macro as true.
+
+    </p><p>
+    Systems that cannot support such a notion are free to provide a minimal
+    header file containing only the definition of the <tt>__STDC_DIR__</tt>
+    macro, being defined to zero.
+    Of&nbsp;course, such implementations could provide non-working versions of
+    the directory handling functions (which simply return failure values),
+    but this would probably be undesirable, and in any case such implementations
+    should still define the macro as false.
+
+    </p><p>
+    In this way, ISO&nbsp;C will not force implementations to provide support
+    for directories, particularly those that cannot
+    (e.g., embedded systems having only a very simple notion of a file system
+    or none at all).
+
+    </p></i></font><p><font color="#0000C0"><i>
+    The value of this macro could be defined in a fashion similar to other
+    existing <tt>__STDC_XXX__</tt> macros, specifying the date of the ISO&nbsp;C
+    standard being supported by the implementation, as a number in the form
+    <tt>yyyymmL</tt>.
+    For example, this macro could be defined as <tt>200910L</tt>, designating
+    support for the ISO&nbsp;C standard dated Oct 2009.
+    </i>
+  </font>
+</p></blockquote>
+
+<h4> See also </h4>
+
+<a href="#type-DIR"><tt>typedef</tt> <tt>DIR</tt></a>,
+<a href="#func-opendir"><tt>opendir()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- OMITTED
+<hr>
+
+<a name="const-__STDC_DIRNAME__"></a>
+<h3> 3.2 Constant <tt>__STDC_DIRNAME__</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>
+    #include &lt;stddir.h&gt;
+
+    #define <b>__STDC_DIRNAME__</b>  <i>integer-expression</i>
+</pre>
+
+[REMOVED TEXT OMITTED]
+!-- END OMITTED -->
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="const-__STDC_SETCURRDIR__"></a>
+<h3> 3.2 Constant <tt>__STDC_SETCURRDIR__</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    #define <b>__STDC_SETCURRDIR__</b>  <i>integer-expression</i>
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This is a preprocessor macro defined as a constant integer expression.
+The expression evaluates to a non-zero (true) value if the implementation
+supports the operation of changing the current directory
+(specifically, if it supports the <tt>setcurrdir()</tt> function),
+otherwise it evaluates to zero (false).
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This is to allow for implementations that do not support the notion of
+    a current directory associated with the executing program,
+    or for those that do but cannot change it at execution time.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    This macro can be used to test at compile time whether or not the
+    <tt>setcurrdir()</tt> function actually does anything useful.
+    </i>
+  </font>
+</p></blockquote>
+
+<h4> See also </h4>
+
+<a href="#func-setcurrdir"><tt>setcurrdir()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- OMITTED
+<hr>
+
+<a name="const-__STDC_SUBDIR__"></a>
+<h3> 3.4 Constant <tt>__STDC_SUBDIR__</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>
+    #include &lt;stddir.h&gt;
+
+    #define <b>__STDC_SUBDIR__</b>  <i>integer-expression</i>
+</pre>
+
+[REMOVED TEXT OMITTED]
+!-- END OMITTED -->
+
+<!-- ----------------------------------------------------------------------- -->
+<p>
+&nbsp;
+<a name="Types"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;4. Types </b> </font> </td> </tr>
+</tbody></table>
+
+</p><p>
+The following types are defined in the
+<tt><b>&lt;stddir.h&gt;</b></tt> standard header.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    The constants, functions, and types in this proposal are to be defined in a
+    new standard library header file.
+    This isolates the new names in a new header file, thus preventing existing
+    code from breaking.
+    </i>
+  </font>
+</p></blockquote>
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="type-DIR"></a>
+<h3> 4.1 Typedef <tt>DIR</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    typedef <i>opaque-type</i>  <b>DIR</b>;
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This object type is used to store the context of a directory search.
+This type is not an array type.
+The contents of this object are implementation-defined.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This structure type is analogous to the standard <tt>FILE</tt> type.
+    Whereas a <tt>FILE</tt> object embodies the context of reading or writing
+    an I/O stream, a <tt>DIR</tt> object embodies the context of a
+    directory search.
+
+    </p><p>
+    This function is modeled after the POSIX <tt>DIR</tt> type,
+    which is an opaque type, presumably a structure.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    This type is explicitly defined as not being an array type so that its
+    address can be taken without any undesirable semantic side effects.
+    This is a requirement to be able to pass pointers to this object type to
+    the directory searching functions.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+Objects of this type are created by the <tt>opendir()</tt> function
+and are destroyed by the <tt>closedir()</tt> function.
+
+</p><h4> See also </h4>
+
+<a href="#func-closedir"><tt>closedir()</tt></a>,
+<a href="#func-opendir"><tt>opendir()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="struct-dirent"></a>
+<h3> 4.2 Structure <tt>dirent</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    <b>struct dirent</b>;
+</pre>
+
+<p>
+This structure contains the following members, in no specific order:
+
+</p><pre>    size_t      <b>d_namlen</b>;       //<i> Entry name length</i>
+    char        <b>d_name</b>[<i>N</i>];      //<i> Entry name</i>
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This structure contains information about a directory entry.
+Such objects are created as a result of searching a directory.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    This function is modeled after the POSIX and Unix <tt>dirent</tt> structure,
+    stripped down to its bare essentials.
+    Also, some of the member types are slightly different than the existing Unix
+    members.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+The members of the structure are described in further detail below.
+
+</p><p>
+</p><dl>
+ <!-- ------------------------------- -->
+ <a name="memb-d_name"></a>
+ <dt> <tt>char <b>d_name</b>[<i>N</i>]</tt>
+ </dt><dd>
+  <p>
+  A null-terminated string containing the name of a directory entry.
+  The string may designate a file, a directory, or some other
+  implementation-defined type of entry within a directory.
+  The length of the array (<tt><i>N</i></tt>) and its contents are
+  implementation-defined.
+
+  </p><p>
+  If the directory entry designates a regular file,
+  this member string may be passed as an argument to the
+  <tt>fopen()</tt> function to open an I/O stream for the named file.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    [Note] <br>
+    Since the type of this member is an array of <tt>char</tt>, there is an
+    implicit assumption that directory entry names are single-byte or
+    multi-byte character strings, and not wide character strings.
+    This parallels the assumption made for filenames passed to the standard
+    <tt>fopen()</tt> function.
+    </i>
+  </font>
+</blockquote>
+
+  <p>
+  If the directory entry designates a directory,
+  this member string may be passed as an argument to the
+  <tt>opendir()</tt> function to search the entries contained
+  within the named directory.
+
+  </p><p>
+  The entry may designate some implementation-defined type of entry other
+  than a regular file or directory.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    [Note] <br>
+    Implementations may provide directory entries that designate O/S entities
+    other than files and directories, such as sockets, pipes, semaphores,
+    volume labels, block devices, etc.
+    </i>
+  </font>
+</blockquote>
+
+  <p>
+  This member may be a <i>flexible array member</i>
+  (i.e., an array with an unspecified size),
+  provided that it is also the last member in the structure.
+  This implies that this member should not be used as an operand of the
+  <tt>sizeof</tt> operator.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    [Note] <br>
+    The length of the directory entry name is related to
+    the standard <tt>FILENAME_MAX</tt> constant.
+
+    <p>
+    A footnote in section §7.19.1 of the ISO&nbsp;9899:1999 standard
+    points out that <tt>FILENAME_MAX</tt> is not a guaranteed limit
+    for all possible file names supported by an implementation
+    (i.e., for an implementation that presumably supports multiple kinds
+    of file systems).
+
+    </p></i></font><p><font color="#0000C0"><i>
+    Therefore it is not clear how to specify the relationship between
+    <tt>FILENAME_MAX</tt> and the length of the <tt>d_name</tt> array.
+    </i>
+  </font>
+</p></blockquote>
+
+ <!-- ------------------------------- -->
+ <p>
+ <a name="memb-d_namlen"></a>
+ <a name="memb-d_namelen"></a> <!-- NOT USED -->
+ </p></dd><dt> <tt>size_t <b>d_namlen</b></tt>
+ </dt><dd>
+  <p>
+  Specifies the length of the name of a directory entry, i.e.,
+  the number of characters, not including the terminating null character,
+  in the member array <tt>d_name</tt>.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    [Note] <br>
+    It would be better to name this member <tt>d_namelen</tt>,
+    but existing practice (BSD Unix, et al) already uses the name
+    <tt>d_namlen</tt>.
+
+    <p>
+    The type of this member is <tt>size_t</tt>.
+    This differs slightly from the Unix specification, which defines it as
+    having type <tt>unsigned</tt>&nbsp;<tt>short</tt>.
+
+    </p><p>
+    The value of this member is related to the standard
+    <tt>FILENAME_MAX</tt> constant.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    As described in the note for member <tt>d_name</tt> above,
+    it is not clear how to specify the relationship between
+    <tt>FILENAME_MAX</tt> and the length of the <tt>d_name</tt> array,
+    i.e., the value of <tt>d_namlen</tt>.
+
+    </i>
+  </font>
+</p></blockquote>
+
+<!-- REMOVED (1.6, 2006-03-07)
+ <!-- ------------------------------- --/>
+ <p>
+ <a name="memb-d_namoff"></a>
+ <dt> <tt>int <b>d_namoff</b></tt>
+ <dd>
+  [REMOVED TEXT OMITTED]
+!-->
+
+<!-- REMOVED (1.6, 2006-03-07)
+ <!-- ------------------------------- --/>
+ <p>
+ <a name="memb-d_typelen"></a>
+ <dt> <tt>size_t <b>d_typelen</b></tt>
+ <dd>
+  [REMOVED TEXT OMITTED]
+!-->
+
+<!-- REMOVED (1.6, 2006-03-07)
+ <!-- ------------------------------- --/>
+ <p>
+ <a name="memb-d_typeoff"></a>
+ <dt> <tt>int <b>d_typeoff</b></tt>
+ <dd>
+  [REMOVED TEXT OMITTED]
+!-->
+
+</dd></dl>
+
+<p>
+The <tt>dirent</tt> structure may contain other implementation-defined members.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    [Note] <br>
+    These structure members are
+    considered the minimum amount of useful information about files
+    while also being the most general for the widest number of
+    existing implementations.
+
+    <p>
+    Some implementations (e.g., POSIX) provide only the entry name,
+    whereas other implementations (e.g., Win32) provide several pieces of
+    information about the directory entry.
+
+    </p><p>
+    However, implementations may provide additional members to reflect their
+    support of, or need for, other directory search context information,
+    such as:
+    </p><ul>
+      <li> search "handle"
+      </li><li> entry record length
+      </li><li> directory lock control information
+      </li><li> entry type or "mode"
+      </li><li> access permissions
+      </li><li> entry serial number within the file system
+    </li></ul>
+    </i>
+  </font>
+</blockquote>
+
+<h4> See also </h4>
+
+<a href="#func-mkdirname"><tt>mkdirname()</tt></a>,
+<a href="#func-mkfilename"><tt>mkfilename()</tt></a>,
+<a href="#func-readdir"><tt>readdir()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<p>
+&nbsp;
+<a name="Functions"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;5. Functions </b> </font> </td> </tr>
+</tbody></table>
+
+<!-- ----------------------------------------------------------------------- -->
+<a name="Functions-Dir"></a>
+</p><h2> 5.1 Directory Management Functions </h2>
+
+<p>
+The following set of functions are used to manage directories for
+an execution unit.
+They are declared in the <tt><b>&lt;stddir.h&gt;</b></tt> standard header.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    There is no function defined in this proposal for removing directories
+    (e.g., <tt>removedir()</tt> or <tt>rmdir()</tt>).
+    This capability is presumably already provided by the
+    standard <tt>remove()</tt> function.
+    See the <a href="#Prior-Art-POSIX-remove">Prior Art</a> section
+    for further discussion.
+    </i>
+  </font>
+</p></blockquote>
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="func-getcurrdir"></a>
+<a name="Function-getexecdir"></a> <!-- OBSOLETE -->
+<a name="Function-getdir"></a> <!-- OBSOLETE -->
+<h3> 5.1.1 Function <tt>getcurrdir()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    int  <b>getcurrdir</b>(char *dir, size_t max);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function determines the current directory associated with the
+execution unit.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This function is modeled after the POSIX <tt>getcwd()</tt> function.
+    The POSIX function returns a <tt>char</tt>&nbsp;<tt>*</tt> type, however.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    Also, the POSIX function takes a second length argument of type <tt>int</tt>
+    instead of type <tt>size_t</tt>.
+    This is only a minor difference, though.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+The <tt>dir</tt> argument points to a buffer that is to be filled with
+the name of the current directory, as determined by the implementation.
+The contents of the string are implementation-defined.
+
+</p><p>
+Argument <tt>max</tt> specifies the maximum number of characters, including
+a terminating null character, to write into the string
+pointed to by <tt>dir</tt>.
+If&nbsp;the name of the current directory, including the terminating null
+character, is longer than <tt>max</tt> characters, the function fails.
+
+</p><p>
+If the implementation does not support the concept of directories or
+a current directory associated with an execution unit,
+the function fails.
+
+</p><h4> Returns </h4>
+
+<p>
+If successful, the function returns a non-negative value
+after modifying the contents of the string pointed to by <tt>dir</tt>.
+
+</p><p>
+On failure, the function returns a negative value
+after modifying the value of <tt>errno</tt>.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    The function could return a negative value whose absolute value indicates
+    the number of characters required to hold the directory name.
+    </i>
+  </font>
+</p></blockquote>
+
+<h4> See also </h4>
+
+<a href="#func-setcurrdir"><tt>setcurrdir()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="func-setcurrdir"></a>
+<a name="Function-setexecdir"></a> <!-- OBSOLETE -->
+<a name="Function-chdir"></a> <!-- OBSOLETE -->
+<h3> 5.1.2 Function <tt>setcurrdir()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    int  <b>setcurrdir</b>(const char *dir);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function establishes the current directory associated with the
+execution unit, as determined by the implementation.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This function is modeled after the POSIX <tt>chdir()</tt> function.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    The proposed name is felt to be more meaningful, however, and
+    better parallels the <tt>getcurrdir()</tt> function name.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+The <tt>dir</tt> argument points to a string containing a directory name.
+The contents of the string are implementation-defined.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    This argument can be the value obtained by calling the
+    <tt>getcurrdir()</tt>, <tt>getdirname()</tt>, or <tt>mkdirname()</tt>
+    function.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+If the implementation does not support the concept of directories or
+a current directory associated with an execution unit,
+the function fails.
+
+</p><p>
+Note that the <tt>__STDC_SETCURRDIR__</tt>
+macro indicates whether or not the implementation supports this function.
+
+</p><h4> Returns </h4>
+
+<p>
+If successful, the function returns a non-negative value
+after establishing a new current directory for the execution unit.
+
+</p><p>
+On failure, the function returns a negative value
+after modifying the value of <tt>errno</tt>.
+
+</p><h4> See also </h4>
+
+<a href="#const-__STDC_SETCURRDIR__"><tt>__STDC_SETCURRDIR__</tt></a>,
+<a href="#func-getcurrdir"><tt>getcurrdir()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="func-createdir"></a>
+<a name="Function-mkdir"></a> <!-- OBSOLETE -->
+<h3> 5.1.3 Function <tt>createdir()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    int  <b>createdir</b>(const char *dir);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function creates a directory of a given name.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This function is modeled after the POSIX <tt>mkdir()</tt> function.
+
+    </p><p>
+    It is simpler and more generic than the POSIX function, though, because it
+    does not take a second argument specifying access permissions for the new
+    directory.
+    The concept of "access permissions" is not defined in ISO&nbsp;C.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    There is no function defined in this proposal for performing the inverse
+    operation of removing a directory
+    (e.g., a <tt>removedir()</tt> or <tt>rmdir()</tt> function).
+    This capability is already provided, presumably, by the standard
+    <tt>remove()</tt> function.
+    See the <a href="#Prior-Art-POSIX-remove">Prior Art</a> section
+    for further discussion.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+The <tt>dir</tt> argument points to a null-terminated string containing
+the name of a new directory to create.
+The contents of the string are implementation-defined.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    [Note] <br>
+    This argument can be the value obtained by calling the
+    <tt>getdirname()</tt> or <tt>mkdirname()</tt> function.
+
+    <p>
+    Some systems support the concept of "absolute" and "relative" directory
+    names.
+
+    </p><p>
+    If the directory name is an "absolute" path name, then the current directory
+    associated with the executing program is ignored when creating the new
+    directory.
+
+    </p><p>
+    If the directory name is a "relative" path name, then the new directory is
+    created as a subdirectory of the current directory associated with the
+    executing program.
+
+    </p><p>
+    If the implementation has no concept of "absolute" or "relative" directory
+    names, then the directory is created in an implementation-defined manner.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    Some systems (e.g., Win32) support the concept of a "device" or "drive"
+    associated with a given directory name.
+    Given a directory name without a device name on such systems, a default
+    device must be assumed by the implementation.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+If the implementation does not support the concept of directories,
+the function fails.
+
+</p><h4> Returns </h4>
+
+<p>
+If successful, the function returns a non-negative value.
+On&nbsp;failure, the function returns a negative value
+after modifying the value of <tt>errno</tt>.
+
+</p><h4> See also </h4>
+
+<a href="#func-getcurrdir"><tt>getcurrdir()</tt></a>,
+<tt>remove()</tt>.
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="Functions-Names"></a>
+<h2> 5.2 Directory and File Name Functions </h2>
+
+<p>
+The following set of functions are used to manipulate directory and file names.
+
+<!-- ----------------------------------------------------------------------- -->
+<a name="func-getdirname"></a>
+</p><h3> 5.2.1 Function <tt>getdirname()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    int  <b>getdirname</b>(char *dir, size_t max, const char *path);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function
+extracts the directory component of a given file name.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    This function is modeled after the Unix <tt>dirname()</tt> function.
+    It&nbsp;operates differently, however, because it does not modify the
+    path name in place.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+Argument <tt>path</tt> points to a string containing a file or directory name.
+The contents of the string are implementation-defined.
+If&nbsp;the string does not specify a valid directory or file path name,
+the function fails.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><p>
+Argument <tt>dir</tt> points to a buffer that is to be filled with the
+directory component of the path name pointed to by <tt>path</tt>.
+The contents of the resulting string are implementation-defined.
+The resulting directory name is suitable for use as an argument to
+the <tt>opendir()</tt>, <tt>mkfilename()</tt>, and <tt>mkdirname()</tt>
+functions.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><p>
+If the path name does not have a directory component,
+<tt>dir</tt> is set to the empty string (i.e., the first character in
+the string is set to <tt>'\0'</tt>) and the function returns zero.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    The function should return zero if the given path name designates the
+    "root" or "top-most" directory on the implementation, since such path names
+    do not have a "parent" directory component.
+
+    </p><p>
+    It is possible that there may need to be another function that retrieves
+    the name of the "root" or "top-most" directory, viz.:
+
+    </p><pre>    int  <b>getrootdir</b>(char *dir, size_t max);</pre>
+
+    </i></font><p><font color="#0000C0"><i>
+    This function would be useful for constructing "absolute" path names.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+Argument <tt>max</tt> specifies the maximum number of characters, including
+a terminating null character, to write into the string
+pointed to by <tt>dir</tt>.
+If&nbsp;resulting directory name component, including the terminating null
+character, is longer than <tt>max</tt> characters, the function fails.
+
+</p><p>
+If the implementation does not support the concept of directory names,
+the function fails.
+
+</p><h4> Returns </h4>
+
+<p>
+If successful, the function returns a positive value indicating
+the length of the resulting directory name component (i.e., the number of
+characters, excluding the terminating null character, written into
+<tt>dir</tt>).
+
+</p><p>
+On failure, the function returns a negative value
+after possibly modifying the value of <tt>errno</tt>.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    The function could return a negative value whose absolute value indicates
+    the number of characters required to hold the resulting directory name.
+    </i>
+  </font>
+</p></blockquote>
+
+<h4> See also </h4>
+
+<a href="#func-getfilename"><tt>getfilename()</tt></a>,
+<a href="#func-mkdirname"><tt>mkdirname()</tt></a>,
+<a href="#func-opendir"><tt>opendir()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="func-getfilename"></a>
+<h3> 5.2.2 Function <tt>getfilename()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    int  <b>getfilename</b>(char *file, size_t max, const char *path);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function
+extracts the file component of a given file name.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    This function is modeled after the Unix <tt>basename()</tt> function.
+    It&nbsp;operates differently, however, because it does not modify the
+    path name in place.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+Argument <tt>path</tt> points to a string containing a file or directory name.
+The contents of the string are implementation-defined.
+If&nbsp;the string does not specify a valid directory or file name,
+the function fails.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><p>
+Argument <tt>file</tt> points to a buffer that is to be filled with the
+file component of the path name pointed to by <tt>path</tt>.
+The contents of the resulting string are implementation-defined.
+The resulting directory name is suitable for use as an argument to
+the <tt>fopen()</tt>, <tt>mkfilename()</tt>, and <tt>mkdirname()</tt>
+functions.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><p>
+Argument <tt>max</tt> specifies the maximum number of characters, including
+a terminating null character, to write into the string
+pointed to by <tt>file</tt>.
+If&nbsp;resulting file name component, including the terminating null character,
+is longer than <tt>max</tt> characters, the function fails.
+
+</p><p>
+If the implementation does not support the concept of directory names,
+the function simply copies string <tt>path</tt> into <tt>file</tt>.
+
+</p><h4> Returns </h4>
+
+<p>
+If successful, the function returns a positive value indicating
+the length of the resulting file name component (i.e., the number of
+characters, excluding the terminating null character, written into
+<tt>file</tt>).
+
+</p><p>
+On failure, the function returns a negative value
+after possibly modifying the value of <tt>errno</tt>.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    The function could return a negative value whose absolute value indicates
+    the number of characters required to hold the resulting file name.
+    </i>
+  </font>
+</p></blockquote>
+
+<h4> See also </h4>
+
+<a href="#func-getdirname"><tt>getdirname()</tt></a>,
+<a href="#func-mkfilename"><tt>mkfilename()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- REMOVED (1.6, 2006-03-07)
+<hr>
+
+<a name="func-getfiletype"></a>
+<h3> 5.2.3 Function <tt>getfiletype()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>
+    #include &lt;stddir.h&gt;
+
+    int  <b>getfiletype</b>(char *type, size_t max, const char *path);
+</pre>
+
+[REMOVED TEXT OMITTED]
+!-- END REMOVED -->
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="func-mkdirname"></a>
+<h3> 5.2.3 Function <tt>mkdirname()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    int  <b>mkdirname</b>(char *path, size_t max,
+             const char *dir, const char *subdir);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function creates a directory name by combining a directory name
+and the name of a subdirectory within that directory.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This function is intended to provide a standard means for creating a
+    directory name from a given directory name and subdirectory name.
+    This function performs the inverse operation of the
+    <tt>getdirname()</tt> and <tt>getfilename()</tt> functions,
+    and complements the <tt>mkfilename()</tt> function.
+
+    </p><p>
+    The format of directory and file names is implementation-specific, as
+    are the rules for combining them to create subdirectory names.
+
+    </p><p>
+    POSIX implementations, for instance, use a <tt>"/"</tt> separator between
+    directory path names and subdirectory names.
+    Microsoft DOS and Windows use a <tt>"\"</tt> or <tt>"/"</tt> separator
+    between directory path components, and also allow for network host names
+    and disk drive prefixes.
+
+    </p><p>
+    Implementations that do not require different formats for directory names
+    and file names (e.g., Unix and Win32) might implement both the
+    <tt>mkdirname()</tt> and <tt>mkfilename()</tt> functions in the same manner.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    Some operating systems employ more complicated formats for subdirectory
+    names, e.g., Digital VMS.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+Argument <tt>dir</tt> points to a null-terminated string containing
+the name of a directory,
+presumably residing on a structured storage device within the implementation.
+The contents of the string are implementation-defined,
+and can be the directory name resulting from a call to
+<tt>getdirname()</tt> or <tt>mkdirname()</tt>.
+If&nbsp;the string is empty (<tt>""</tt>), it is assumed to specify the name of
+the current directory associated with the execution unit.
+If&nbsp;the implementation does not support such a concept, the function fails.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><p>
+Argument <tt>subdir</tt> points to a null-terminated string containing
+the name of a
+subdirectory located within the directory designated by the <tt>dir</tt> string.
+The contents of the string are implementation-defined,
+and can be the subdirectory name resulting from a call to
+<tt>getfilename()</tt>.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><p>
+Argument <tt>path</tt> points to a character array that is to be filled with
+the null-terminated directory name that results from
+combining the given directory name and subdirectory name.
+The method by which these components are combined into a single name
+and the contents of the resulting name are implementation-defined.
+If&nbsp;the components cannot be combined into a valid subdirectory name,
+the function fails.
+The resulting subdirectory name is suitable for use as an argument to
+the <tt>opendir()</tt> function.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    [Note] <br>
+    Since these arguments are character strings, there is an implicit assumption
+    that directory names are single-byte or multi-byte
+    character strings, and not wide character strings.
+    This parallels the assumption made for directory names passed to the
+    <tt>opendir()</tt> function.
+    </i>
+  </font>
+</blockquote>
+
+<p>
+Argument <tt>max</tt> specifies the maximum number of characters,
+including a terminating null character, to write into the string
+pointed to by <tt>path</tt>.
+If&nbsp;the resulting subdirectory name contains more than <tt>max</tt>
+characters, the function fails.
+
+</p><p>
+If the implementation does not support the notion of directory names
+or the notion of subdirectories, the function fails.
+<!-- OMIT
+(Note that in this case, the <tt>__STDC_SUBDIR__</tt> constant will be equal
+to zero.)
+!-->
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This function is related to another proposal <a href="#Ref-6">[6]</a>.
+    Specifically, the
+    <a href="http://david.tribble.com/text/c0xfilesys.html#_filesys-fs_flags"><tt>fs_flags</tt></a>
+    member of the proposed <tt>_filesys</tt> structure
+    and the <tt>_FILESYS_SUBDIRS</tt> constant, which together specify whether
+    or not a given file system supports subdirectories;
+    and the <tt>_FILESYS_NAMES_DIFF</tt> constant, which specifies whether or
+    not a file system makes a distinction between file and directory names.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    It is assumed that a given implementation may support more than one type
+    of file system, and that some of those support subdirectories while
+    others do not.
+    The <tt>_FILESYS_SUBDIRS</tt> attribute in particular can be examined at
+    runtime to determine if a given file system meaningfully supports the
+    construction of subdirectory names by the <tt>mkdirname()</tt> function.
+    </i>
+  </font>
+</p></blockquote>
+
+<h4> Returns </h4>
+
+<p>
+If successful, the function returns a positive value indicating
+the length of the resulting subdirectory name
+(i.e., the number of characters, excluding the terminating null character,
+written into <tt>path</tt>),
+after modifying the contents of the string pointed to by <tt>path</tt>.
+
+</p><p>
+On failure, the function returns a negative value
+after possibly modifying the value of <tt>errno</tt>.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    The function could return a negative value whose absolute value indicates
+    the number of characters required to hold the resulting directory name.
+    </i>
+  </font>
+</p></blockquote>
+
+<h4> See also </h4>
+
+<a href="#func-getdirname"><tt>getdirname()</tt></a>,
+<a href="#func-getfilename"><tt>getfilename()</tt></a>,
+<a href="#func-mkfilename"><tt>mkfilename()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="func-mkfilename"></a>
+<h3> 5.2.4 Function <tt>mkfilename()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    int  <b>mkfilename</b>(char *path, size_t max,
+             const char *dir, const char *file);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function creates a file name by combined a directory name
+and the name of a file within that directory.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This function is intended to provide a standard means for creating a
+    file name from a given directory name and file (or subdirectory) name.
+    This function performs the inverse operation of the
+    <tt>getdirname()</tt> and <tt>getfilename()</tt> functions,
+    and complements the <tt>mkdirname()</tt> function.
+
+    </p><p>
+    The format of directory and file names is implementation-specific, as
+    are the rules for combining them to create file names.
+
+    </p><p>
+    POSIX implementations, for instance, use a <tt>"/"</tt> separator between
+    directory path names and file names.
+    Microsoft DOS and Windows use a <tt>"\"</tt> or <tt>"/"</tt> separator
+    between directory path components and file names, and also allow for
+    network host names and disk drive prefixes.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    Some operating systems employ more complicated formats for specifying
+    file names, e.g., Digital VMS.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+Argument <tt>dir</tt> points to a null-terminated string containing
+the name of a directory,
+presumably residing on a structured storage device within the implementation.
+The contents of the string are implementation-defined,
+and can be the directory name resulting from a call to
+<tt>getdirname()</tt> or <tt>mkdirname()</tt>.
+If&nbsp;the string is empty (<tt>""</tt>), it is assumed to specify the name of
+the current directory associated with the execution unit.
+If&nbsp;the implementation does not support such a notion, the function fails.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><p>
+Argument <tt>file</tt> points to a null-terminated string containing
+the name of a file
+located within the directory designated by the <tt>dir</tt> string.
+The contents of the string are implementation-defined,
+and can be the file name resulting from a call to <tt>getfilename()</tt>.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><p>
+Argument <tt>path</tt> points to a character array that is to be filled with
+the null-terminated file name that results from
+combining the given directory name and file name.
+The method by which these components are combined into a file name
+and the contents of the resulting string are implementation-defined.
+If&nbsp;the components cannot be combined into a valid file name,
+the function fails.
+The resulting file name is suitable for use as an argument to
+the <tt>fopen()</tt> function.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    [Note] <br>
+    Since these arguments are character strings, there is an implicit assumption
+    that directory and file names are single-byte or multi-byte
+    character strings, and not wide character strings.
+    This parallels the assumption made for filenames passed to the standard
+    <tt>fopen()</tt> function.
+    </i>
+  </font>
+</blockquote>
+
+<p>
+Argument <tt>max</tt> specifies the maximum number of characters,
+including a terminating null character, to write into the string
+pointed to by <tt>path</tt>.
+If&nbsp;the resulting file name contains more than <tt>max</tt> characters,
+the function fails.
+
+</p><p>
+If the implementation does not support the concept of directory names,
+the function ignores the <tt>dir</tt> argument.
+
+</p><h4> Returns </h4>
+
+<p>
+If successful, the function returns a positive value indicating
+the length of the resulting file name
+(i.e., the number of characters, excluding the terminating null character,
+written into <tt>path</tt>),
+after modifying the contents of the string pointed to by <tt>path</tt>.
+
+</p><p>
+On failure, the function returns a negative value
+after possibly modifying the value of <tt>errno</tt>.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    The function could return a negative value whose absolute value indicates
+    the number of characters required to hold the resulting file name.
+    </i>
+  </font>
+</p></blockquote>
+
+<h4> See also </h4>
+
+<a href="#func-getdirname"><tt>getdirname()</tt></a>,
+<a href="#func-getfilename"><tt>getfilename()</tt></a>,
+<a href="#func-matchfilename"><tt>matchfilename()</tt></a>,
+<a href="#func-mkdirname"><tt>mkdirname()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="func-matchfilename"></a>
+<h3> 5.2.5 Function <tt>matchfilename()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    int  <b>matchfilename</b>(const char *path, const char *pattern);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function determines if a given path name matches a filename pattern.
+
+</p><p>
+Argument <tt>path</tt> points to a null-terminated string containing a
+file or directory name.
+The contents of the string are implementation-defined.
+If&nbsp;the string is empty (<tt>""</tt>), it can only be matched by an empty
+filename pattern.
+If&nbsp;the string does not contain a valid file or directory name,
+the behavior is undefined.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><p>
+Argument <tt>pattern</tt> points to a null-terminated string containing a
+filename pattern.
+The format and contents of the string are implementation-defined.
+If&nbsp;the string is empty (<tt>""</tt>), it matches only an empty path name.
+If&nbsp;the string does not contain a valid filename pattern,
+the behavior is undefined.
+If&nbsp;this pointer is null, the behavior is undefined.
+
+</p><blockquote>
+ <font color="#0000C0">
+  <i>
+  <p>
+  [Note] <br>
+  A "pattern" contains pattern-matching characters, similar to a
+  regular expression, but designed to match file and/or directory names.
+  It&nbsp;is implementation-defined as to what constitutes a valid pattern.
+
+  </p><p>
+  Some systems allow fairly primitive patterns, e.g., Win32 allows the
+  <tt>'?'</tt> and <tt>'*'</tt> characters, also known as "wildcard" characters.
+  Other systems provide more elaborate pattern-matching, e.g., Unix, which
+  also provides character sets, ranges, and exclusion sets.
+
+  </p></i></font><p><font color="#0000C0"><i>
+  Some implementations (e.g., Win32) provide case-insensitive filenames, so that
+  the names <tt>"abc"</tt>, <tt>"Abc"</tt>, and <tt>"ABC"</tt> all refer to
+  the same file or directory.
+  Other systems (e.g., Unix) provide case-sensitive filenames, so that
+  all three names refer to different files or directories.
+  </i>
+ </font>
+</p></blockquote>
+
+<!-- OMITTED
+<p>
+If argument <tt>dopt</tt> is not zero, the string pointed to by <tt>path</tt>
+may contain directory name components in addition to a filename component.
+If&nbsp;this argument is zero, the path name strings can contain only a
+filename component.
+!-->
+
+<h4> Returns </h4>
+
+<p>
+If <tt>path</tt> contains a path name that matches the filename pattern
+<tt>pattern</tt>, the function returns a positive value.
+The criteria by which a pattern matches a given filename is
+implementation-defined.
+
+</p><blockquote>
+ <font color="#0000C0">
+  <i>
+  </i></font><p><font color="#0000C0"><i>
+  [Note] <br>
+  It is unspecified whether or not the path and pattern strings can contain
+  directory components in addition to a filename component.
+  </i>
+ </font>
+</p></blockquote>
+
+<p>
+On failure, the function returns a negative value
+after possibly modifying the value of <tt>errno</tt>.
+
+</p><p>
+If the implementation does not support filename patterns,
+the function does a simple comparison of the path name string to the
+filename pattern string in a manner consistent with the naming of
+files and directories in the implementation.
+
+</p><blockquote>
+ <font color="#0000C0">
+  <i>
+  <p>
+  [Note] <br>
+  If the implementation does not support filename patterns, i.e., it does not
+  provided "wildcard" filename expressions, the <tt>pattern</tt> argument
+  must match the <tt>path</tt> argument.
+
+  </p></i></font><p><font color="#0000C0"><i>
+  For implementations that support case-sensitive filenames, this means that
+  the two strings must match exactly, as if calling <tt>strcmp()</tt>.
+  For implementations that support case-insensitive filenames, the comparison
+  must treat upper and lower case alphabetic characters the same,
+  so that, for instance, the names <tt>"abc"</tt>, <tt>"Abc"</tt>, and
+  <tt>"ABC"</tt> all match each other.
+  </i>
+ </font>
+</p></blockquote>
+
+<h4> See also </h4>
+
+<a href="#func-getdirname"><tt>getdirname()</tt></a>,
+<a href="#func-getfilename"><tt>getfilename()</tt></a>,
+<a href="#func-mkdirname"><tt>mkdirname()</tt></a>,
+<a href="#func-mkfilename"><tt>mkfilename()</tt></a>,
+<tt>strcmp()</tt>.
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="Functions-Search"></a>
+<h2> 5.3 Directory Searching Functions </h2>
+
+<p>
+The following set of functions are used to search directories.
+
+<!-- ----------------------------------------------------------------------- -->
+<a name="func-opendir"></a>
+<a name="Function-diropen"></a> <!-- OBSOLETE -->
+</p><h3> 5.3.1 Function <tt>opendir()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    DIR *  <b>opendir</b>(const char *dir);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function initiates a search within a directory.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This function operates on directory searches in an fashion analogous
+    to the way that <tt>fopen()</tt> operates on I/O streams.
+
+    </p><p>
+    This function is modeled after the POSIX <tt>opendir()</tt> function.
+    See the <a href="#Prior-Art-POSIX-DIR">Prior Art</a> section
+    for further discussion.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    Some implementations may require the use of an I/O stream for the
+    directory searching operations.
+  </i>
+  </font>
+</p></blockquote>
+
+<p>
+Argument <tt>dir</tt> points to a
+string containing the name of a directory within the implementation.
+The contents of the string are implementation-defined,
+and can be the directory name resulting from a call to
+<tt>getdirname()</tt> or <tt>mkdirname()</tt>.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    [Note] <br>
+    Since this argument is a character string, there is an implicit assumption
+    that directory names are single-byte or multi-byte character
+    strings, and not wide character strings.
+    This parallels the assumption made for filenames passed to the standard
+    <tt>fopen()</tt> function.
+    </i>
+  </font>
+</blockquote>
+
+<p>
+If the implementation does not support the concept of directories or
+directory searching, the function fails.
+
+</p><h4> Returns </h4>
+
+<p>
+If the directory name pointed to by <tt>dir</tt>
+constitutes a meaningful directory name (according to the implementation),
+the function creates and returns a pointer to
+an object containing context information for searching the specified directory.
+This object can subsequently be passed to the other directory searching
+functions.
+The returned object is destroyed by a subsequent call to <tt>closedir()</tt>.
+
+</p><p>
+On failure, the function returns null
+after modifying the value of <tt>errno</tt>.
+
+</p><h4> See also </h4>
+
+<a href="#type-DIR"><tt>typedef</tt> <tt>DIR</tt></a>,
+<a href="#func-closedir"><tt>closedir()</tt></a>,
+<a href="#func-getdirname"><tt>getdirname()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="func-closedir"></a>
+<a name="Function-dirclose"></a> <!-- OBSOLETE -->
+<h3> 5.3.2 Function <tt>closedir()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    int  <b>closedir</b>(DIR *dp);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function terminates a directory search and destroys the
+directory search context object that was created by a prior call to
+<tt>opendir()</tt>.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This function operates on directory searches in an fashion analogous
+    to the way that <tt>fclose()</tt> operates on I/O streams.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    This function is modeled after the POSIX <tt>closedir()</tt> function.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+Argument <tt>dp</tt> points to an object containing
+directory search context information
+that was created by a prior call to <tt>opendir()</tt>.
+If&nbsp;the pointer is null
+or the object has been used as an argument of a prior call to
+<tt>closedir()</tt>, the behavior is undefined.
+
+</p><p>
+After a successful return from this function,
+the object pointed to by <tt>dp</tt> may not be used for further
+directory searching operations
+(and cannot be assumed to still exist as a valid memory object).
+
+</p><h4> Returns </h4>
+
+<p>
+If successful, the object pointed to by <tt>dp</tt> is destroyed
+(in an implementation-defined way)
+and the function returns a non-negative value.
+
+</p><p>
+Any pointers to <tt>dirent</tt> structures returned by prior calls to
+<tt>readdir()</tt> for the same directory search context are rendered invalid.
+
+</p><p>
+On failure, the function returns a negative value
+after modifying the value of <tt>errno</tt>.
+
+</p><h4> See also </h4>
+
+<a href="#type-DIR"><tt>typedef</tt> <tt>DIR</tt></a>,
+<a href="#func-opendir"><tt>opendir()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="func-readdir"></a>
+<a name="Function-dirread"></a> <!-- OBSOLETE -->
+<h3> 5.3.3 Function <tt>readdir()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    const struct dirent *  <b>readdir</b>(DIR *dp);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function reads the next entry within a directory being searched.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    This function is modeled after the POSIX <tt>readdir()</tt> function.
+    See the <a href="#Prior-Art-POSIX-readdir">Prior Art</a> section
+    for further discussion.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+Argument <tt>dp</tt> points to an object containing
+directory search context information
+that was created by a prior call to <tt>opendir()</tt>.
+If&nbsp;the pointer is null
+or if the object has been used as an argument in a call to <tt>closedir()</tt>,
+the behavior is undefined.
+
+</p><h4> Returns </h4>
+
+<p>
+If successful, a pointer to a structure is returned, where the structure
+contains information about the next directory entry within the
+directory search context.
+The position of the search is advanced to the next directory entry.
+
+</p><p>
+The means by which the structure is allocated is unspecified.
+<!-- OMIT
+, other than to specify that the object returned may not be deallocated
+by passing it as an argument to <tt>free()</tt>.
+!-->
+Subsequent calls to this function invalidate any previously returned pointer
+values, as does a subsequent call to <tt>rewinddir()</tt>
+or <tt>closedir()</tt>.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    Presumably, the returned structure is allocated by either the
+    <tt>readdir()</tt> or the <tt>opendir()</tt> function.
+
+    </p><p>
+    A call to <tt>readdir()</tt> renders any previously returned <tt>dirent</tt>
+    structure invalid, which implies that pointers to such structures should not
+    be kept beyond one call to <tt>readdir()</tt>.
+
+    </p><p>
+    A subsequent call to <tt>rewinddir()</tt> or <tt>closedir()</tt> also
+    renders any previously returned <tt>dirent</tt> structure pointer invalid.
+
+    </p><p>
+    An earlier version of this proposal defined this function as accepting a
+    second argument, a pointer to a <tt>dirent</tt> structure, which was filled
+    with information about the next entry found within the directory search.
+
+    </p><p>
+    The problem with that earlier approach is that it requires the
+    <tt>dirent</tt> structure to be as large as possible in order to contain the
+    largest entry name (filename) allowed by the implementation.
+    The latter alternative approach of returning a pointer to a <tt>dirent</tt>
+    object allows the object to be only as large as necessary to hold the found
+    entry name.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    Of course, this latter approach requires more strict behavior with
+    regards to what happens to the <tt>dirent</tt> objects once another call is
+    made to <tt>readdir()</tt>, <tt>rewinddir()</tt>, or <tt>closedir()</tt>.
+    The most reasonable approach is to mandate that the storage for all such
+    previously returned <tt>dirent</tt> objects are no longer valid after
+    subsequent calls to these functions.
+    This gives implementations some latitude, allowing them to allocate such
+    objects as part of the <tt>DIR</tt> object storage, or to manage them as
+    some other kind of separately allocated and deallocated objects.
+    Presumably, calls to <tt>readdir()</tt> et al manage the allocations and
+    deallocations appropriately, and a final call to <tt>closedir()</tt>
+    deallocates all such objects for a given directory search context.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+On failure, or if there are no more entries to be found in the directory search,
+the function returns a null pointer
+after modifying the value of <tt>errno</tt>,
+and the position of the search is left in an indeterminate state.
+
+</p><h4> See also </h4>
+
+<a href="#type-DIR"><tt>typedef</tt> <tt>DIR</tt></a>,
+<a href="#struct-dirent"><tt>struct</tt> <tt>DIR</tt></a>,
+<a href="#func-opendir"><tt>opendir()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<a name="func-rewinddir"></a>
+<a name="Function-dirseek"></a> <!-- OBSOLETE -->
+<a name="Function-dirtell"></a> <!-- OBSOLETE -->
+<h3> 5.3.4 Function <tt>rewinddir()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>    #include &lt;stddir.h&gt;
+
+    int  <b>rewinddir</b>(DIR *dp);
+</pre>
+
+<h4> Description </h4>
+
+<p>
+This function resets the search position of a given
+directory search context object to its initial position.
+
+</p><blockquote>
+  <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    This function operates on directory searches in an fashion analogous
+    to the way that <tt>rewind()</tt> operates on I/O streams.
+
+    </p><p>
+    This function is modeled after the POSIX <tt>rewinddir()</tt> function.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    However, whereas the POSIX function does not return a value,
+    this function returns a value indicating success or failure.
+    This is a minor difference, though.
+    See the <a href="#Prior-Art-POSIX-rewinddir">Prior Art</a> section
+    for further discussion.
+    </i>
+  </font>
+</p></blockquote>
+
+<blockquote>
+  <font color="#0000C0">
+    <i>
+    </i></font><p><font color="#0000C0"><i>
+    [Note] <br>
+    What constitutes the "initial position" of a directory is
+    implementation-defined.
+    </i>
+  </font>
+</p></blockquote>
+
+<p>
+Argument <tt>dp</tt> points to an object containing
+directory search context information
+that was created by a prior call to <tt>opendir()</tt>.
+If&nbsp;the pointer is null
+or the object has been the subject of a prior call to <tt>closedir()</tt>,
+the behavior is undefined.
+
+</p><h4> Returns </h4>
+
+<p>
+If successful,
+the directory search context object is modified
+and the function returns a non-negative value.
+
+</p><p>
+Any <tt>dirent</tt> structure pointers returned by prior calls to
+<tt>readdir()</tt> for the same directory search context are rendered invalid.
+
+</p><p>
+On failure, the function returns a negative value
+after modifying the value of <tt>errno</tt>.
+
+</p><h4> See also </h4>
+
+<a href="#type-DIR"><tt>typedef</tt> <tt>DIR</tt></a>,
+<a href="#func-opendir"><tt>opendir()</tt></a>.
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- REMOVED (1.3, 2003-12-29)
+<hr>
+
+<a name="func-seekdir"></a>
+<a name="Function-dirseek"></a> <!-- OBSOLETE --/>
+<h3> 5.3.4 Function <tt>seekdir()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>
+    #include &lt;stddir.h&gt;
+
+    int  <b>seekdir</b>(DIR *dp, long int pos);
+</pre>
+
+[REMOVED TEXT OMITTED]
+!-- END REMOVED -->
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- REMOVED (1.3, 2003-12-29)
+<hr>
+
+<a name="func-telldir"></a>
+<a name="Function-dirtell"></a> <!-- OBSOLETE --/>
+<h3> 5.3.5 Function <tt>telldir()</tt> </h3>
+
+<h4> Synopsis </h4>
+
+<pre>
+    #include &lt;stddir.h&gt;
+
+    long int  <b>telldir</b>(DIR *dp);
+</pre>
+
+[REMOVED TEXT OMITTED]
+!-- END REMOVED -->
+
+<!-- ----------------------------------------------------------------------- -->
+<p>
+&nbsp;
+<a name="Examples"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;6. Examples </b> </font> </td> </tr>
+</tbody></table>
+
+</p><p>
+The following examples illustrate the use of the functions described
+in this proposal.
+
+<!-- ------------------------------- -->
+<a name="Example-1"></a>
+</p><h3> Example 1 </h3>
+
+<p>
+The following function searches a given directory, printing the names of
+the entries contained within it.
+
+</p><p>
+</p><pre>    #include &lt;stddir.h&gt;
+    #include &lt;stdio.h&gt;
+
+    int print_dir(const char *dir)
+    {
+        <b>DIR</b> *                   dp;
+        const <b>struct dirent</b> *   ent;
+        int                     cnt;
+
+        //<i> Open the given directory</i>
+        dp = <b>opendir</b>(dir);
+        if (dp == NULL)
+            return -1;
+
+        //<i> Search the directory</i>
+        printf("%s:\n", dir);
+        cnt = 0;
+
+        while (ent = <b>readdir</b>(dp), ent != NULL)
+        {
+            cnt++;
+            printf("%3d  %s\n", cnt, ent-&gt;d_name);
+        }
+
+        //<i> Terminate the search</i>
+        <b>closedir</b>(dp);
+        dp = NULL;
+
+        printf("Entries: %d\n", cnt);
+        return cnt;
+    }</pre>
+
+<!-- ------------------------------- -->
+<hr>
+
+<a name="Example-2"></a>
+<h3> Example 2 </h3>
+
+<p>
+The following function creates a subdirectory named <tt>"logs"</tt>
+within the program's current directory, then creates and opens a file
+named <tt>"mylog"</tt> within the new subdirectory.
+
+</p><p>
+</p><pre>    #include &lt;stddir.h&gt;
+    #include &lt;stdio.h&gt;
+
+    FILE * open_logfile(const char *dir)
+    {
+        char    fname[FILENAME_MAX];
+
+        //<i> Create a subdirectory</i>
+        if (<b>createdir</b>("logs") &lt; 0)
+            return NULL;
+
+        //<i> Create a logfile in the new subdirectory</i>
+        if (<b>mkfilename</b>(fname, sizeof(fname), "logs", "mylog") &lt; 0)
+            return NULL;
+
+        return fopen(fname, "a");
+    }</pre>
+
+<!-- ------------------------------- -->
+<hr>
+
+<a name="Example-3"></a>
+<h3> Example 3 </h3>
+
+<p>
+The following function removes all of the entries within a given directory.
+(Note that this code uses functions, types, and constants defined in another
+related proposal <a href="#Ref-5">[5]</a>.)
+
+<!-- OMIT
+<p>
+Note that this code is rather simple and may not work on implementations where
+a <tt>remove()</tt> call invalidates a directory search being performed on the
+directory containing the removed file.
+For these kinds of implementations, more complicated code is required.
+!-->
+
+</p><p>
+</p><pre>    #include &lt;stdbool.h&gt;
+    #include &lt;stddir.h&gt;
+    #include &lt;stdio.h&gt;
+
+    bool clean_dir(const char *dir)
+    {
+        <b>DIR</b> *                   dp;
+        const <b>struct dirent</b> *   ent;
+
+        //<i> Do a directory search</i>
+        dp = <b>opendir</b>(dir);
+        if (dp == NULL)
+            goto fail;
+
+        //<i> Find and remove all entries from the directory</i>
+        while (ent = <b>readdir</b>(dp), ent != NULL)
+        {
+            <b>struct _fileinfo</b>    info;
+            char                entname[FILENAME_MAX];
+
+            //<i> Remove the next directory entry</i>
+            if (<b>mkfilename</b>(entname, sizeof(entname), dir, ent-&gt;<b>d_name</b>) &lt; 0)
+                goto fail;
+
+            if (<b>_getfileinfo</b>(entname, &amp;info) &lt; 0)
+                goto fail;
+
+            switch (info.<b>fi_type</b>)
+            {
+            case <b>_FILE_TYPE_DIR</b>:
+                //<i> Remove a subdirectory entry</i>
+                if (! clean_dir(entname))
+                    goto fail;
+                if (remove(entname) != 0)
+                    goto fail;
+                break;
+
+            case <b>_FILE_TYPE_FILE</b>:
+                //<i> Remove a regular file entry</i>
+                if (remove(entname) != 0)
+                    goto fail;
+                break;
+
+            default:
+                //<i> Nonstandard directory entry type</i>
+                if (remove(entname) != 0)
+                    goto fail;
+                break;
+            }
+        }
+
+        //<i> Done</i>
+        <b>closedir</b>(dp);
+        return true;
+
+    fail:
+        //<i> Failure</i>
+        if (dp != NULL)
+            <b>closedir</b>(dp);
+        return false;
+    }</pre>
+
+<!-- ------------------------------- -->
+<hr>
+
+<a name="Example-4"></a>
+<h3> Example 4 </h3>
+
+<p>
+The following function copies all of the files within a given directory
+to another directory.
+(Note that this code uses functions, types, and constants defined in a
+related proposal <a href="#Ref-5">[5]</a>.)
+
+</p><p>
+</p><pre>    #include &lt;stdbool.h&gt;
+    #include &lt;stddir.h&gt;
+    #include &lt;stdio.h&gt;
+
+    extern void  copy_file(const char *srcfname, const char *dstfname);
+
+    bool copy_dir(const char *src_dir, const char *dst_dir)
+    {
+        <b>DIR</b> *                   srcp;
+        const <b>struct dirent</b> *   ent;
+
+        //<i> Do a directory search</i>
+        srcp = <b>opendir</b>(src_dir);
+        if (srcp == NULL)
+            goto fail;
+
+        //<i> Find and copy all file entries in the directory</i>
+        while (ent = <b>readdir</b>(srcp), ent != NULL)
+        {
+            <b>struct _fileinfo</b>    info;
+            char                srcfname[FILENAME_MAX];
+            char                dstfname[FILENAME_MAX];
+
+            //<i> Copy the next directory entry</i>
+            if (<b>mkfilename</b>(srcfname, sizeof(srcfname), src_dir, ent-&gt;<b>d_name</b>) &lt; 0)
+                goto fail;
+
+            if (<b>_getfileinfo</b>(srcfname, &amp;info) &lt; 0)
+                goto fail;
+
+            switch (info.<b>fi_type</b>)
+            {
+            case <b>_FILE_TYPE_FILE</b>:
+                //<i> Copy a regular file entry</i>
+                if (<b>mkfilename</b>(dstfname, sizeof(dstfname), dst_dir, ent-&gt;<b>d_name</b>) &lt; 0)
+                    break;
+                copy_file(srcfname, dstfname);
+                break;
+
+            case <b>_FILE_TYPE_DIR</b>:
+            default:
+                //<i> Not a file entry, ignore it</i>
+                break;
+            }
+        }
+
+        //<i> Done</i>
+        <b>closedir</b>(srcp);
+        return true;
+
+    fail:
+        //<i> Failure</i>
+        if (srcp != NULL)
+            <b>closedir</b>(srcp);
+        return false;
+    }</pre>
+
+<!-- ------------------------------- -->
+<hr>
+
+<a name="Example-5"></a>
+<h3> Example 5 </h3>
+
+<p>
+The following functions
+extract and print all of the components of the current directory name.
+
+</p><p>
+</p><pre>    #include &lt;stddir.h&gt;
+    #include &lt;stdio.h&gt;
+
+    void print_dir_names(const char *path)
+    {
+        char    name[FILENAME_MAX];
+
+        //<i> Display the parent directory component names first</i>
+        if (<b>getdirname</b>(name, sizeof(name), path) &gt; 0)
+            print_dir_names(name);
+        else
+            printf("[%s]", path);
+
+        //<i> Display the last component name</i>
+        if (<b>getfilename</b>(name, sizeof(name), path) &gt; 0)
+            printf("[%s]", name);
+    }
+
+    void get_dir_names(void)
+    {
+        char    path[FILENAME_MAX];
+
+        //<i> Get the current directory</i>
+        if (<b>getcurrdir</b>(path, sizeof(path) &lt; 0)
+        {
+            printf("unknown\n");
+            return;
+        }
+        else
+            print_dir_names(path);
+    }</pre>
+
+<!-- ------------------------------- -->
+<hr>
+
+<a name="Example-6"></a>
+<h3> Example 6 </h3>
+
+<p>
+The following function
+prints all the filename entries within the current directory that
+match a given filename pattern.
+
+</p><p>
+</p><pre>    #include &lt;stddir.h&gt;
+    #include &lt;stdio.h&gt;
+
+    void list_matching_files(const char *pat)
+    {
+        char                    cwd[FILENAME_MAX];
+        <b>DIR</b> *                   dp;
+        const <b>struct dirent</b> *   ent;
+
+        //<i> Get the current directory</i>
+        if (<b>getcurrdir</b>(cwd, sizeof(cwd) &lt; 0)
+        {
+            printf("Can't get the current directory\n");
+            return;
+        }
+
+        //<i> Search the directory for matching filenames</i>
+        dp = <b>opendir</b>(cwd);
+        if (dp == NULL)
+        {
+            printf("Can't search the current directory: %s\n", cwd);
+            return;
+        }
+
+        //<i> Find matching filenames in the directory</i>
+        while (ent = <b>readdir</b>(dp), ent != NULL)
+        {
+            if (<b>matchfilename</b>(ent-&gt;<b>d_name</b>, pat) &gt;= 0)
+                printf("%s\n", ent-&gt;<b>d_name</b>);
+        }
+
+        //<i> Stop searching</i>
+        <b>closedir</b>(dp);
+    }</pre>
+
+<!-- ----------------------------------------------------------------------- -->
+<p>
+&nbsp;
+<a name="Prior-Art"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;7. Prior Art </b> </font> </td> </tr>
+</tbody></table>
+
+</p><p>
+The following items describe various existing implementations that provide
+directory searching capabilities and the various differences and problems
+with them.
+
+</p><p>
+</p><ol>
+ <!-- ------------------------------ -->
+ <a name="Prior-Art-currdir"></a>
+ <li>
+  Many operating systems (file systems) support the notion of <i>directory</i>.
+  In&nbsp;the same way, most operating systems associate a
+  <i>current directory</i>
+  (a.k.a. a <i>current working directory</i>) with each executing program.
+  Some systems support the notion of a <i>current drive</i> or
+  <i>current device</i> as well.
+
+ <!-- ------------------------------ -->
+ <p>
+ <a name="Prior-Art-POSIX-fnames"></a>
+ </p></li><li>
+  <b>POSIX</b> path names are composed of zero or more directory names
+  followed by a file name:
+<pre>    /<i>dir1</i>/<i>dir2</i>/<i>file.ext</i></pre>
+
+  <p>
+  Each directory and file name component is separated by a slash (<tt>/</tt>).
+  Path names can contain almost any character, including spaces and unprintable
+  control characters.
+  Both file and directory names follow the same naming syntax, and cannot be
+  distinguished by form alone.
+
+  </p><p>
+  If the path name starts with a leading slash, it is known as an
+  <i>absolute</i> path name, and specifies a unique file or directory name.
+  If&nbsp;the path name does not start with a leading slash, it is known as a
+  <i>relative</i> path name, and specifies a file or directory name relative
+  to the current directory.
+
+  </p><p>
+  POSIX (and Unix) also allows other I/O device types to be named
+  in this fashion, including:
+  </p><ul>
+   <li> pipe (FIFO)
+   </li><li> symbolic link
+   </li><li> character device
+   </li><li> block device
+   </li><li> socket (on some implementations)
+   </li><li> semaphore (on some implementations)
+   </li><li> shared memory segment (on some implementations)
+  </li></ul>
+
+ <!-- ------------------------------ -->
+ <p>
+ <a name="Prior-Art-Win32-fnames"></a>
+ </p></li><li>
+  Microsoft Windows (<b>Win32</b>) path names are composed of an optional
+  device prefix, followed by zero or more directory names,
+  followed by a file name:
+<pre>    <i>d</i>:\<i>dir1</i>\<i>dir2</i>\<i>file.ext</i></pre>
+
+  <p>
+  Path names may have a leading <i>drive</i> letter (<tt>C:</tt>) that
+  specifies a local disk drive or device.
+
+  </p><p>
+  Each directory and file name component is separated by a backslash
+  (<tt>\</tt>), but the operating system also supports slashes (<tt>/</tt>)
+  as separators (which are recognized by the <tt>fopen()</tt> function).
+  Path names can contain almost any character, including spaces and unprintable
+  control characters, but cannot contain certain special characters
+  (<tt>&lt;</tt>&nbsp;<tt>&gt;</tt>&nbsp;<tt>|</tt>&nbsp;<tt>?</tt>&nbsp;<tt>*</tt>&nbsp;<tt>"</tt>)
+  used by the command shell.
+  Filenames are stored as 16-bit Unicode names internally within the
+  file system.
+  Both file and directory names follow the same naming syntax, and cannot be
+  distinguished by form alone.
+
+  </p><p>
+  If the path name starts with a leading slash, it is known as an
+  <i>absolute</i> path name, and specifies a unique file or directory name.
+  If&nbsp;the path name does not start with a leading slash, it is known as a
+  <i>relative</i> path name, and specifies a file or directory name relative
+  to the current directory.
+
+  </p><p>
+  Network directories and devices path names are prefixed with a two slashes
+  and the node name:
+</p><pre>    \\<i>node</i>\<i>d</i>:\<i>dir</i>\<i>dir</i>\<i>file</i>.<i>ext</i></pre>
+
+  <p>
+  The file <i>extension</i> (suffix) generally indicates the type and format
+  of the file, and the Win32 operating system associates specific applications
+  to each registered file type.
+  For example, <tt>foo.txt</tt> specifies a text file, and
+  <tt>foo.exe</tt> specifies an executable binary program file.
+
+ <!-- ------------------------------ -->
+ </p><p>
+ <a name="Prior-Art-VMS"></a>
+ </p></li><li>
+  Digital <b>VMS</b> uses file names of the form:
+<pre>    <i>node</i>::<i>device</i>:[<i>directory</i>]<i>file</i>.<i>ext</i>;<i>vs</i></pre>
+
+  which are composed of one or more of the following components:
+  <ul>
+   <li> node
+   </li><li> device
+   </li><li> directory (composed of one or more directory names)
+   </li><li> file
+   </li><li> type
+   </li><li> version number
+  </li></ul>
+
+  <p>
+  Some example VMS file names:
+</p><pre>    ACS001::SYSLIB:[STD.RUNTIME.LIBS]CRT.LIB;12
+    USR:[USERS.HOME.DRT]FOO.C
+    [-.INCLUDE]FOO.H
+    PHONE.DAT;-1
+    HOSTS.TXT</pre>
+
+  <p>
+  VMS provides the capability for searching for entry names within directories.
+  This functionality is provided as system library functions, and also as
+  built-in procedures within the command line interface (CLI).
+
+ <!-- ------------------------------ -->
+ </p><p>
+ <a name="Prior-Art-OS390"></a>
+ </p></li><li>
+  <b>IBM OS/390</b> uses <i>partitioned datasets</i> (PDS),
+  which are analogous to directories and contain <i>members</i>,
+  which are analogous to files.
+
+  <p>
+  Datasets have names like <tt>USERS.SMITHG.R2V4.SOURCE.C(FOO)</tt>.
+  Such a name can be construed as designating the file named <tt>"FOO"</tt>
+  residing within the directory named <tt>"USERS.SMITHG.R2V4.SOURCE.C"</tt>.
+
+ <!-- ------------------------------ -->
+ </p><p>
+ <a name="Prior-Art-POSIX-DIR"></a>
+ </p></li><li>
+  The design of the directory searching functions in this proposal borrowed
+  heavily from the <b>POSIX</b> standard library <a href="#Ref-2">[2]</a>.
+
+  <p>
+  <b>POSIX</b> provides an opaque <tt>DIR</tt> type
+  for directory searches, analogous to the <tt>FILE</tt> type for I/O streams,
+  and a set of functions for searching directories.
+
+  </p><p>
+  The contents of a typical Unix <tt>&lt;dirent.h&gt;</tt> header file
+  look something like the following (although features marked with an
+  <tt>(E)</tt> are not defined by POSIX 1003.1-1998 and might not be present in
+  some implementations):
+
+</p><pre>    // &lt;dirent.h&gt;
+
+    typedef void *  <b>DIR</b>;                        //<i> Opaque type</i>
+
+    <b>struct dirent</b>
+    {
+        unsigned long   d_fileno;               //<i> Entry file number</i>      (E)
+        unsigned short  d_reclen;               //<i> Length of this struct</i>  (E)
+        unsigned short  d_namlen;               //<i> Length of d_name</i>       (E)
+        char            d_name[MAXNAMLEN+1];    //<i> Entry name</i>
+    };
+
+    extern DIR *            <b>opendir</b>(const char *path);
+    extern struct dirent *  <b>readdir</b>(DIR *dirp);
+    extern long int         <b>telldir</b>(DIR *dirp);             // (E)
+    extern void             <b>seekdir</b>(DIR *dirp, long loc);   // (E)
+    extern void             <b>rewinddir</b>(DIR *dirp);
+    extern int              <b>closedir</b>(DIR *dirp);
+    extern int              <b>dirfd</b>(DIR *dirp);               // (E)</pre>
+
+  <p>
+  Some Unix implementations (e.g., BSD 4.4) used the structure tag
+  <tt>direct</tt> instead of <tt>dirent</tt> prior to the standardization
+  of POSIX.
+
+  <a name="Prior-Art-POSIX-opendir"></a>
+  </p><p>
+  The <tt>opendir()</tt> function initiates a directory search,
+  creating a <tt>DIR</tt> object.
+
+  </p><p>
+  The <tt>DIR</tt> object is to directories what
+  the <tt>FILE</tt> object is to files.
+  This object contains directory search context information, and is passed
+  to subsequent calls to the other directory searching functions, finally
+  being destroyed by a call to <tt>closedir()</tt>.
+
+ <!-- ------------------------------ -->
+ </p><p>
+ <a name="Prior-Art-POSIX-types"></a>
+ </p></li><li>
+  At first glance it seems desirable to adopt the <b>POSIX</b> directory
+  searching types and functions straight into ISO&nbsp;C, or at least a
+  simplified subset of them.
+  However, a few minor issues must be resolved.
+
+  <br><br>
+  <ol type="a">
+   <!-- ---------------------------- -->
+   <li>
+    <a name="Prior-Art-POSIX-dirent"></a>
+    The <tt>dirent</tt> structure is defined in the POSIX specification
+    as having a fixed length.
+    However, the structure is typically implemented as though the
+    <tt>d_name</tt> member is a <i>flexible array member</i>, containing as few
+    as two characters.
+    Presumably, the structures are allocated as part of the directory searching
+    context information, possibly within the <tt>DIR</tt> structure itself.
+    Since POSIX allows filenames to be anywhere from <tt>1</tt> to
+    <tt>MAXNAMLEN</tt> (which is typically 255 or more) characters long,
+    it seems entirely reasonable that the actual amount of space allocated
+    for each filename entry is variable, and therefore that the structure is
+    also variably-sized.
+
+   <!-- ---------------------------- -->
+   <a name="Prior-Art-POSIX-namlen"></a>
+   <p>
+   </p></li><li>
+    The <tt>d_namlen</tt> member is not defined by the core POSIX
+    specification, but this member is typically added as an enhancement in most
+    Unix implementations.
+    This member (when provided) is defined with a type of
+    <tt>unsigned</tt>&nbsp;<tt>short</tt>.
+    To&nbsp;be completely portable and consistent with ISO&nbsp;C, this should
+    instead have type <tt>size_t</tt>.
+    This should have little impact on existing POSIX-compliant code, since
+    this does not affect the value of the member as it is used within arithmetic
+    expressions, although it will break rare code that uses the address of
+    the member.
+
+   <!-- ---------------------------- -->
+   <a name="Prior-Art-POSIX-reclen"></a>
+   <p>
+   </p></li><li>
+    The <tt>d_reclen</tt> member is not defined by the core POSIX
+    specification, but this member is typically added as an enhancement in most
+    Unix implementations.
+    This member (when provided) specifies the size of its parent
+    <tt>dirent</tt> structure, and is thus a useful piece of information needed
+    when copying such structures.
+    However, it is not felt that the ability to copy these structures is
+    something that is widely needed.
+    Therefore this member is not included in the proposal for the standard
+    library.
+
+   <!-- ---------------------------- -->
+   <a name="Prior-Art-POSIX-readdir"></a>
+   <p>
+   </p></li><li>
+    The <tt>readdir()</tt> function returns a pointer to a
+    <tt>dirent</tt> structure.
+    This structure is presumably allocated as part of the directory search
+    context information.
+    Though not explicitly specified in the POSIX specification, a call to
+    <tt>readdir()</tt> presumably renders invalid the contents of any
+    <tt>dirent</tt> structure returned by a prior call.
+    This behavior must be defined explicitly in order to make the functions
+    completely well-defined and portable.
+
+<!-- OMITTED
+    <p>
+    A cleaner approach is to pass in a pointer to a <tt>dirent</tt>-like
+    structure, placing the onus on the calling function to allocate and
+    deallocate the structure.
+    This allow multiple different directory entry structures to exist
+    at the same time.
+    It&nbsp;also eliminates the possiblity of dangling pointers which reference
+    <tt>dirent</tt> objects that are no longer active or that otherwise
+    no longer exist after a subsequent call to <tt>readdir()</tt> or
+    <tt>closedir()</tt>.
+
+    <p>
+    This alternate approach requires a different function prototype, and thus
+    a different function name in order to prevent breaking existing code.
+!-->
+
+   <!-- ---------------------------- -->
+<!-- OMITTED
+   <li>
+    <p>
+    The structures returned by the <tt>readdir()</tt> function are typically
+    stored within a buffer containing multiple structures, each of which may
+    have a different length.
+    This makes it difficult to save the contents of a given structure
+    by copying it into another.
+
+    <p>
+    A cleaner approach is to use a fixed-length structure for each directory
+    entry retrieval.
+!-->
+
+   <!-- ---------------------------- -->
+   <a name="Prior-Art-POSIX-seekdir"></a>
+   <a name="Prior-Art-POSIX-telldir"></a>
+   <p>
+   </p></li><li>
+    The <tt>seekdir()</tt> and <tt>telldir()</tt> functions are
+    typically provided by Unix implementations, even though they are not part of
+    the POSIX specification.
+
+    <p>
+    Section §B.5.1.2 of POSIX 1003.1-1988 describes the rationale for
+    not providing the <tt>seekdir()</tt> and <tt>telldir()</tt> functions.
+    It&nbsp;was felt that some existing files systems were not amenable to
+    supporting such functions (i.e., where an integer position indicator did not
+    fit some file system models), and that these functions were not really all
+    that useful.
+    Only the <tt>rewinddir()</tt> function was provided in POSIX, on the
+    assumption that it was useful.
+
+   <!-- ---------------------------- -->
+   <a name="Prior-Art-POSIX-rewinddir"></a>
+   </p><p>
+   </p></li><li>
+    The <tt>rewinddir()</tt> function for directory searches is analogous
+    to the <tt>rewind()</tt> function for I/O streams.
+
+    <p>
+    The POSIX function (which is typically implemented as a macro
+    defined using the <tt>seekdir()</tt> function) does not return a value.
+    However, it seems like a more orthogonal design to allow it to return a
+    value indicating success or failure, in a fashion similar to
+    <tt>fseek()</tt>.
+
+    </p><p>
+    This is a minor change to POSIX, and should not affect any existing code.
+
+   <!-- ---------------------------- -->
+   <a name="Prior-Art-POSIX-dirfd"></a>
+   </p><p>
+   </p></li><li>
+    The <tt>dirfd()</tt> function returns a <i>file descriptor</i>, which
+    is a concept that does not exist in ISO&nbsp;C.
+    This function would either need to be replaced with a function that returns
+    a <tt>FILE</tt> pointer (which may not be meaningful or possible on many
+    implementations), or simply be omitted from the proposal altogether.
+
+  </li></ol>
+
+  <p>
+  For these reasons, this proposal suggests some, but not all, of the same
+  functions defined by POSIX.
+
+ <!-- ------------------------------ -->
+ </p><p>
+ <a name="Prior-Art-Win32-search"></a>
+ </p></li><li>
+  Microsoft Windows (<b>Win32</b>) <a href="#Ref-4">[4]</a>
+  provides a slightly different approach to searching directories, wherein
+  the steps of initiating the search and finding the first entry within a
+  directory are combined into a single operation
+  (the <tt>FindFirstFile()</tt> function).
+  Subsequent entries are then found using a different operation
+  (the <tt>FindNextFile()</tt> function).
+
+  <p>
+  This approach requires more complicated programming logic in
+  order to achieve a typical directory searching loop, because the first
+  directory entry is handled separately from subsequent entries.
+
+  </p><p>
+  The simpler POSIX approach (initialize, then find) was chosen for this
+  proposal.
+  The proposed functions, however, can be written in terms of system-dependent
+  functions that implement this other scheme (initialize and find first, then
+  find next) fairly easily.
+
+ <!-- ------------------------------ -->
+ </p><p>
+ <a name="Prior-Art-Win32-find"></a>
+ </p></li><li>
+  Microsoft Windows (<b>Win32</b>) provides library functions for
+  searching directories:
+
+<pre>    // &lt;winbase.h&gt;
+
+    <b>struct _WIN32_FIND_DATA</b>
+    {
+        unsigned int        dwFileAttributes;
+        struct _FILETIME    ftCreationTime;
+        struct _FILETIME    ftLastAccessTime;
+        struct _FILETIME    ftLastWriteTime;
+        unsigned int        nFileSizeHigh;
+        unsigned int        nFileSizeLow;
+        char                cFileName[MAX_PATH];
+        char                cAlternateFileName[14];
+    };
+
+    extern HANDLE   <b>FindFirstFile</b>(
+        const char *lpFileName,
+        struct _WIN32_FIND_DATA *lpFindFileData);
+<!-- OMIT
+    extern HANDLE   <b>FindFirstFileEx</b>(
+        const char *lpFileName,
+        enum _FINDEX_INFO_LEVELS fInfoLevelId,
+        void *lpFindFileData,
+        enum _FINDEX_SEARCH_OPS fSearchOp,
+        void *lpSearchFilter,
+        unsigned int dwAdditionalFlags);
+!-->
+    extern bool     <b>FindNextFile</b>(
+        HANDLE hFindFile,
+        struct _WIN32_FIND_DATA *lpFindFileData);</pre>
+
+  <p>
+  The searching functions require the use of a <i>wildcard</i> filename,
+  which specifies the subset of directory entry names to match.
+
+<!-- OMITTED
+  <p>
+  The searching functions provide the ability to specify specific file
+  <i>attributes</i>, which act as a filter to select a given subset of all
+  the entries within a given directory.
+
+  <p>
+  Win32 supports the following kinds of file types (directory entries):
+
+  <ul>
+   <li> Normal (regular)
+   <li> Directory
+  </ul>
+
+  <p>
+  Win32 supports the following kinds of file access permissions:
+
+  <ul>
+   <li> Read-only
+   <li> Hidden
+   <li> System
+   <li> Archive (backup)
+  </ul>
+!-- END OMITTED -->
+
+ <!-- ------------------------------ -->
+ </p><p>
+ <a name="Prior-Art-MSDOS-find"></a>
+ </p></li><li>
+  Much of the functionality of directory handling provided by Win32 was derived
+  from the earlier Microsoft <b>MS-DOS</b> operating system
+  (a.k.a. <b>PC-DOS</b> or simply <b>DOS</b>).
+  MS-DOS provides system operations for searching a given directory with
+  <i>find first</i> and <i>find next</i> system service calls.
+
+  <p>
+  <b>Win32</b> also provides a second set of library functions for searching
+  directories, presumably for backward compatibility with <b>MS-DOS</b>
+  programs:
+
+</p><pre>    // &lt;io.h&gt;
+
+    <b>struct _finddata_t</b>
+    {
+        unsigned        attrib;
+        time_t          time_create;    //<i> -1 for FAT file systems</i>
+        time_t          time_access;    //<i> -1 for FAT file systems</i>
+        time_t          time_write;
+        unsigned long   size;
+        char            name[260];
+    };
+
+    extern long         <b>_findfirst</b>(const char *name, struct _finddata_t *ctx);
+    extern int          <b>_findnext</b>(long hdl, struct _finddata_t *ctx);
+    extern int          <b>_findclose</b>(long hdl);</pre>
+
+ <!-- ------------------------------ -->
+ <p>
+ <a name="Prior-Art-Win32-compat"></a>
+ </p></li><li>
+  Microsoft Windows (<b>Win32</b>) provides directory handling functions that
+  are mostly compatible with POSIX:
+
+<pre>    // &lt;direct.h&gt;
+    extern int          <b>chdir</b>(const char *dir);
+    extern char *       <b>getcwd</b>(char *buf, int max);
+    extern int          <b>mkdir</b>(const char *dir);       //<i> Incompatible</i>
+    extern int          <b>rmdir</b>(const char *dir);</pre>
+
+  <p>
+  Also provided are wide character (<tt>wchar_t</tt>) versions of these
+  functions:
+
+</p><pre>    // &lt;direct.h&gt;
+    extern int          <b>_wchdir</b>(const wchar_t *dir);
+    extern wchar_t *    <b>_wgetcwd</b>(wchar_t *dir, int max);
+    extern wchar_t *    <b>_wgetdcwd</b>(int dev, wchar_t *dir, int max);
+    extern int          <b>_wmkdir</b>(const wchar_t *dir);
+    extern int          <b>_wrmdir</b>(const wchar_t *dir);</pre>
+
+  <p>
+  Win32 also provides functions for retrieving and setting the current
+  directory path and the current disk drive:
+
+</p><pre>    // &lt;direct.h&gt;
+    extern int              <b>_chdrive</b>(int dev);
+    extern char *           <b>_getdcwd</b>(int dev, char *dir, int max);
+    extern int              <b>_getdrive</b>(void);
+    extern unsigned long    <b>_getdrives</b>(void);
+    extern unsigned         <b>_getdiskfree</b>(unsigned dev, struct _diskfree_t *info);</pre>
+
+ <!-- ------------------------------ -->
+ <p>
+ <a name="Prior-Art-POSIX-mkdir"></a>
+ </p></li><li>
+  <b>POSIX</b> provides the <tt>mkdir()</tt> function for creating a directory.
+  While it seems desirable to standardize this function,
+  there are a few problems with this approach.
+
+  <ol type="a">
+   <!-- ---------------------------- -->
+   <li>
+    <p>
+    The POSIX version of <tt>mkdir()</tt> takes a second argument in addition to
+    the name of the directory to be created, specifying a permissions
+    (or <i>mode</i>) bitmask.
+    This bitmask, along with the executing program's user permissions mask
+    (<i>umask</i>) defines the resulting access permissions for the newly
+    created directory.
+    Accepting such an argument is somewhat POSIX-centric,
+    and there is no concept of <i>access permissions</i> defined in
+    ISO&nbsp;C.
+
+   <!-- ---------------------------- -->
+   </p></li><li>
+    <p>
+    Other implementations support variants of the <tt>mkdir()</tt> function.
+    For instance, Microsoft Visual C/C++ provides a function taking a single
+    argument, and hence is incompatible with the POSIX version.
+    This makes it difficult to design a single <tt>mkdir()</tt> function
+    that is compatible across most implementations.
+
+  </p></li></ol>
+
+  <p>
+  It is for these reasons that standardizing the POSIX <tt>mkdir()</tt>
+  function is not a good idea, and that a more reasonable approach is to
+  invent a new function (<tt>createdir()</tt>) that is simple and generic
+  enough for all implementations.
+
+ <!-- ------------------------------ -->
+ </p><p>
+ <a name="Prior-Art-POSIX-remove"></a>
+ </p></li><li>
+  <b>POSIX</b> supports the standard <tt>remove()</tt> function,
+  deleting either a specified file or directory name.
+  It&nbsp;defines the function to behave like <tt>unlink()</tt> if the argument
+  designates a file, and like <tt>rmdir()</tt> if the argument designates a
+  directory.
+
+  <p>
+  Most implementations allow a directory to be removed only if it is empty,
+  i.e., if it contains no file or subdirectory entries.
+  The process attempting to remove a directory must also have the appropriate
+  access permissions to do so.
+
+  </p><p>
+  BSD Unix (4.4) allows only the superuser (root) to delete a directory.
+  This means that the standard <tt>remove()</tt> function does not delete an
+  argument designating a directory for arbitrary users, even if they own the
+  directory.
+  This appears to be problem with the BSD implementation, rather than a
+  flaw in the specification of <tt>remove()</tt>.
+
+  </p><p>
+  It might be desirable to add a function to delete a directory, to provide
+  a complement to the operation of deleting a file.
+
+  </p><blockquote>
+   <font color="#0000C0">
+    <i>
+    <p>
+    [Note] <br>
+    A possible definition for such a function could look like:
+</p><pre>    #include &lt;stddir.h&gt;
+    int  <b>removedir</b>(const char *dir);</pre>
+
+    <p>
+    where the <tt>dir</tt> argument contains the name of a directory
+    in some implementation-defined form.
+
+    </p><p>
+    On success, the directory is removed from the system and the function
+    returns a positive value, otherwise the function modifies <tt>errno</tt>
+    and returns a negative value.
+
+    </p></i></font><p><font color="#0000C0"><i>
+    It is implementation-defined whether or not the directory must be empty in
+    order to be removed.
+    </i>
+   </font>
+  </p></blockquote>
+
+  <p>
+  If such a function were added to ISO&nbsp;C, the semantics of the
+  existing <tt>remove()</tt> function would probably need to be amended.
+
+ <!-- ------------------------------ -->
+ </p><p>
+ <a name="Prior-Art-patterns"></a>
+ </p></li><li>
+  The <b>Open Group Unix Specification</b> provides the
+  <tt>fnmatch()</tt> function for matching a filename with a
+  filename <i>pattern</i>.
+  Other flavors of Unix provide a <tt>gmatch()</tt> function for this.
+  This functionality is also built into the Unix command shells
+  (Bourne shell, C shell, Korn shell, et al).
+
+  <p>
+  <b>Win32</b> provides the ability to specify a directory search for
+  filenames with <i>wildcards</i>,
+  acting as a filter to select a subset of directory entries whose names
+  match the wildcard filename.
+
+  </p><p>
+  <b>VMS</b> provides the ability to specify a directory search for
+  filenames using <i>wildcards</i>.
+  This functionality is provided as system library calls as well as built-in
+  procedures in the command line interface (CLI).
+
+  </p><p>
+  These common capabilities are reflected in the proposed
+  <tt>matchfilename()</tt> function, which is defined in a
+  very generic fashion.
+
+ <!-- ------------------------------ -->
+ </p><p>
+ <a name="Discussion-getrootdir"></a>
+ </p></li><li>
+  There is no function in this proposal for retrieving the name of the
+  "root" or "top-most" directory within an implementation.
+  Most file systems support some notion of this, and such a capability appears
+  to be desirable for creating "absolute" path names.
+
+  <p>
+  However, there do not appear to be any implementations that provide a function
+  for accessing this information.
+  Indeed, it is very common for programs to assume some kind of explicitly
+  hard-coded value to serve this purpose
+  (e.g., POSIX uses <tt>"/"</tt>).
+
+  </p><p>
+  A possible definition for such a function could look like:
+</p><pre>    int  <b>getrootdir</b>(char *dir, size_t max);</pre>
+
+  <p>
+  It is not clear how useful such a function would be, or more importantly,
+  how universal the function would be across implementations.
+
+</p></li></ol>
+
+<!-- ----------------------------------------------------------------------- -->
+<p>
+&nbsp;
+<a name="Source"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;Source Code </b> </font> </td> </tr>
+</tbody></table>
+
+</p><p>
+Proof-of-concept source code is contained in these files:
+
+</p><ul>
+ <li> <a href="http://david.tribble.com/text/c0xdir.c"><tt>c0xdir.c</tt></a>
+ </li><li> <a href="http://david.tribble.com/text/c0xdir.h"><tt>c0xdir.h</tt></a>
+ </li><li> <a href="http://david.tribble.com/text/c0xdirtest.c"><tt>c0xdirtest.c</tt></a>
+</li></ul>
+
+<!-- ----------------------------------------------------------------------- -->
+<p>
+&nbsp;
+<a name="Acknowledgements"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;Acknowledgements </b> </font> </td> </tr>
+</tbody></table>
+
+</p><p>
+The author wishes to express his gratitude to those who provided comments,
+suggestions, and criticism on this proposal.
+
+</p><p>
+Further discussion can be found on the
+<a href="news:comp.std.c"><tt>comp.std.c</tt></a>
+<a href="http://groups.google.com/groups?q=comp.std.c">newsgroup</a>,
+under the subject of
+<tt>"C0X:</tt> <tt>Directory</tt> <tt>access</tt> <tt>funcs"</tt>.
+
+<!-- ----------------------------------------------------------------------- -->
+</p><p>
+&nbsp;
+<a name="References"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;References </b> </font> </td> </tr>
+</tbody></table>
+
+</p><dl>
+  <!-- ----------------------------- -->
+  <a name="Ref-1"></a>
+  <dt> [1]&nbsp;
+    <b>Programming Language C</b>
+    <b>- ISO/IEC 9899:1999</b>
+    <b>- International Standard</b>
+  </dt><dd>
+    1999, ISO/EIC.
+    <br>
+    International Standards Organization,
+    <a href="http://www.iso.ch/"><tt>http://www.iso.ch</tt></a>.
+    <br>
+    Available from the American National Standards Institute (ANSI) site at
+    <a href="http://www.ansi.org/"><tt>http://www.ansi.org</tt></a>.
+    <br>
+    <i>The ISO&nbsp;C (C99) standard.</i>
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="Ref-2"></a>
+  </p></dd><dt> [2]&nbsp;
+    <b>Portable Operating System Interface for Computer Environments</b>
+    <b>- IEEE Standard</b>
+  </dt><dd>
+    IEEE&nbsp;Std&nbsp;1003.1-1998,
+    ISBN&nbsp;1-55937-003-3.
+    <br>
+    Sep 1988,
+    The Institute of Electrical and Electronics Engineers (IEEE), Inc.
+    <br>
+    <i>The standard POSIX API specification.</i>
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="Ref-3"></a>
+  </p></dd><dt> [3]&nbsp;
+    <b>Open Group Single Unix Specification</b>
+  </dt><dd>
+    The Open Group.
+    <br>
+    Available online at
+    <a href="http://www.opengroup.org/"><tt>http://www.opengroup.org</tt></a>
+    <br>
+    <i>The standard Unix API specification.</i>
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="Ref-4"></a>
+  </p></dd><dt> [4]&nbsp;
+    <b>Microsoft Windows API Reference</b>
+  </dt><dd>
+    1995, Microsoft,
+    <a href="http://www.microsoft.com/"><tt>http://www.microsoft.com</tt></a>.
+    <br>
+    The API reference is available online at
+    <a href="http://www.msdn.com/"><tt>http://www.msdn.com</tt></a>
+    <br>
+    <i>The Win32 API specification.</i>
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="Ref-5"></a>
+  </p></dd><dt> [5]&nbsp;
+    <b>ISO C 200X Proposal: File Inquiry Functions</b>
+  </dt><dd>
+    2003, David R. Tribble.
+    <br>
+    <a href="http://david.tribble.com/text/c0xfstat.html"><tt>http://david.tribble.com/text/c0xfstat.html</tt></a>
+    <br>
+    <i>A related proposal specifying functions for interrogating the
+    implementation about a given file name or I/O stream.</i>
+
+  <!-- ----------------------------- -->
+  <p>
+  <a name="Ref-6"></a>
+  </p></dd><dt> [6]&nbsp;
+    <b>ISO C 200X Proposal: File System Inquiry Functions</b>
+  </dt><dd>
+    2003, David R. Tribble.
+    <br>
+    <a href="http://david.tribble.com/text/c0xfilesys.html"><tt>http://david.tribble.com/text/c0xfilesys.html</tt></a>
+    <br>
+    <i>A related proposal specifying functions for interrogating the
+    implementation about a given file system.</i>
+
+</dd></dl>
+
+<!-- ----------------------------------------------------------------------- -->
+<p>
+&nbsp;
+<a name="History"></a>
+<table rows="1" width="100%" cols="1" border="1">
+ <tbody><tr> <td bgcolor="#000000"> <font size="+2" color="#FFFFFF">
+   <b> &nbsp;Revision History </b> </font> </td> </tr>
+</tbody></table>
+
+</p><dl>
+  <!-- ----------------------------- -->
+  <dt> <b>1.7, 2006-03-10</b>
+  </dt><dd>
+    Added function <tt>matchfilename()</tt>. <br>
+    Added some discussion about a <tt>getrootdir()</tt> capability. <br>
+
+  <!-- ----------------------------- -->
+  <p>
+  </p></dd><dt> <b>1.6, 2006-03-07</b>
+  </dt><dd>
+    Removed the changes of revision 1.5, eliminating the concept of
+    <i>file type</i> from all of the types and functions. <br>
+
+  <!-- ----------------------------- -->
+  <p>
+  </p></dd><dt> <b>1.5, 2004-07-14</b>
+  </dt><dd>
+    Added the "Goals" section. <br>
+    Added a <tt>type</tt> parameter to functions <tt>mkfilename()</tt> and
+    <tt>mkdirname()</tt>. <br>
+    Added function <tt>getfiletype()</tt>. <br>
+    Added members <tt>d_namoff</tt>, <tt>d_typeoff</tt>, and <tt>d_typelen</tt>
+    to structure <tt>dirent</tt>. <br>
+
+  <!-- ----------------------------- -->
+  <p>
+  </p></dd><dt> <b>1.4, 2004-01-19</b>
+  </dt><dd>
+    Added function <tt>mkdirname()</tt>. <br>
+    Added macro <tt>__STDC_SETCURRDIR__</tt>. <br>
+    Added Example 4. <br>
+
+  <!-- ----------------------------- -->
+  <p>
+  </p></dd><dt> <b>1.3, 2003-12-29</b>
+  </dt><dd>
+    Replaced the term <i>"current execution directory"</i> with
+     <i>"current directory"</i>. <br>
+    Added a new header, <tt>&lt;stddir.h&gt;</tt>, in which the new
+    functions and types are defined. <br>
+    Added the <tt>__STDC_DIR__</tt> constant. <br>
+    Added the <tt>d_namlen</tt> member to the <tt>dirent</tt> structure type.
+    <br>
+    Changed the name of function <tt>getexecdir()</tt> to <tt>getcurrdir()</tt>.
+    <br>
+    Changed the name of function <tt>setexecdir()</tt> to <tt>setcurrdir()</tt>.
+    <br>
+    Changed the names of the directory searching functions to be identical to
+    the corresponding POSIX functions.
+    <br>
+    Changed the semantics of function <tt>readdir()</tt> to be like the
+    POSIX <tt>readdir()</tt> function.
+    <br>
+    Removed functions <tt>seekdir()</tt> and<tt>telldir()</tt> and added
+    function <tt>rewinddir()</tt>.
+    <br>
+
+  <!-- ----------------------------- -->
+  <p>
+  </p></dd><dt> <b>1.2, 2003-10-27</b>
+  </dt><dd>
+    Changed the name of function <tt>getdir()</tt> to <tt>getexecdir()</tt>.
+    <br>
+    Changed the name of function <tt>chdir()</tt> to <tt>setexecdir()</tt>. <br>
+    Added more examples. <br>
+    Added more detailed explanations of Win32 support for directory functions
+     in the "Prior Art" section. <br>
+    Mentioned VMS in the "Prior Art" section. <br>
+    Added the "Source Code" section. <br>
+
+  <!-- ----------------------------- -->
+  <p>
+  </p></dd><dt> <b>1.1, 2003-10-14</b>
+  </dt><dd>
+    Initial revision. <br>
+</dd></dl>
+
+<!-- ----------------------------------------------------------------------- -->
+<hr>
+
+<p>
+This document is in the public domain.
+Permission is granted to freely redistribute, copy, or reference this document.
+
+</p><p>
+<i>
+This document:
+<a href="http://david.tribble.com/text/c0xdir.html">
+<tt>http://david.tribble.com/text/c0xdir.html</tt></a>.
+</i>
+
+</p><p>
+<i>
+Author's email:
+<a href="mailto:david@tribble.com"><tt>david@tribble.com</tt></a>.
+<br>
+Author's home page:
+<a href="http://david.tribble.com/"><tt>http://david.tribble.com</tt></a>.
+</i>
+
+
+
+
+</p></body></html>
+<!--
+
+-----BEGIN PGP SIGNATURE-----
+Version: PGPfreeware 7.0.3 for non-commercial use <http://www.pgp.com>
+
+iQA/AwUBRBJPfXS9RCOKzj55EQJh1ACfQKuypsXSN7/8eaVBQBR286yahuEAoNMX
+YivTk1cNke00ipRXBWSv7542
+=3QjU
+-----END PGP SIGNATURE-----
+!-->
