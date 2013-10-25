@@ -61,6 +61,8 @@ static const char	REV[] =
  #include <stdio.h>
 #endif
 
+#define _unix  
+
 #if defined(_unix)
  #include <dirent.h>
  #include <fnmatch.h>

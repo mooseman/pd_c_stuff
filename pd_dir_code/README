@@ -1,11 +1,15 @@
 
    *** README -  pd_dir_code *** 
 
-Acknowledgement - The HTML documentation and the source code in this repo is all 
+Acknowledgement - The HTML documentation and almost all of the source code in this repo is  
 done by David R. Tribble <david@tribble.com>. 
 
-This material comes from David's site here - 
+The material comes from David's site here - 
 http://david.tribble.com/text/c0xdir.html
+
+The only code by me is the file print_dir.c and that code is based on "Example 1" on David's 
+page above.  
+
 
 From the introduction of the above document -
   

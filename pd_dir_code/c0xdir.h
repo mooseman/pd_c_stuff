@@ -64,6 +64,8 @@ static const char	c0x_c0xdir_h_REV[] =
 
 #define __STDC_DIR__	20060310
 
+#define _unix  
+
 #if defined(_unix)
  #define __STDC_SETCURRDIR__	1	/* setcurrdir() supported	*/
 #elif defined(_WIN32)
