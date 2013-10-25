@@ -1,5 +1,5 @@
 
-/* print_dir.h  */ 
+/* print_dir.c  */ 
 /* Print the contents of a directory (file sizes and names). */ 
 /* Acknowledgment - Most of this code is by David Tribble and  */ 
 /* comes from his Example 1 here -  */ 
